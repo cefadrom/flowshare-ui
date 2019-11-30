@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <link href="../css/account.css" rel="stylesheet" type="text/css">
+    <link href="https://use.fontawesome.com/releases/v5.9.0/css/all.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Barlow&display=swap" rel="stylesheet">
+
+    <link href="../img/favicon/apple-icon-57x57.png" rel="apple-touch-icon" sizes="57x57">
+    <link href="../img/favicon/apple-icon-60x60.png" rel="apple-touch-icon" sizes="60x60">
+    <link href="../img/favicon/apple-icon-72x72.png" rel="apple-touch-icon" sizes="72x72">
+    <link href="../img/favicon/apple-icon-76x76.png" rel="apple-touch-icon" sizes="76x76">
+    <link href="../img/favicon/apple-icon-114x114.png" rel="apple-touch-icon" sizes="114x114">
+    <link href="../img/favicon/apple-icon-120x120.png" rel="apple-touch-icon" sizes="120x120">
+    <link href="../img/favicon/apple-icon-144x144.png" rel="apple-touch-icon" sizes="144x144">
+    <link href="../img/favicon/apple-icon-152x152.png" rel="apple-touch-icon" sizes="152x152">
+    <link href="../img/favicon/apple-icon-180x180.png" rel="apple-touch-icon" sizes="180x180">
+    <link href="../img/favicon/android-icon-192x192.png" rel="icon" sizes="192x192" type="image/png">
+    <link href="../img/favicon/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
+    <link href="../img/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png">
+    <link href="../img/favicon/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
+    <link href="../img/favicon/manifest.json" rel="manifest">
+    <meta content="#fdcb6e" name="msapplication-TileColor">
+    <meta content="../img/favicon/ms-icon-144x144.png" name="msapplication-TileImage">
+    <meta content="#fdcb6e" name="theme-color">
+
+    <title>Account - Flowshare</title>
+
+</head>
+<body>
+
+
+<!------------ HEADER ------------>
+
+<header>
+
+    <div id="logo-big"></div>
+
+    <div id="header-home">
+        <i class="fas fa-home"></i>
+        <span id="header-account-user">Home</span>
+    </div>
+
+</header>
+
+
+<!------------ NAV DIV ------------>
+
+<nav>
+
+    <div class="title">
+        <span>
+            <i class="fas fa-user"></i>
+            Account
+        </span>
+        <div class="active" id="nav-arrow">
+            <i class="fas fa-caret-up"></i>
+        </div>
+    </div>
+
+    <div class="category" data-nav-value="#content-account" id="category-account">My account</div>
+    <div class="category" data-nav-value="flows" id="category-flows">My flows</div>
+    <div class="category" data-nav-value="#content-upload" id="category-upload">Upload a flow</div>
+    <div class="category" data-nav-value="#content-daily" id="category-sharecoins">Daily sharecoins</div>
+    <div class="category" data-nav-value="transactions" id="category-transactions">Transactions</div>
+
+</nav>
+
+
+<!------------ CONTENT ------------>
+
+<div id="content">
+    <div id="loading-message">Loading data...</div>
+</div>
+
+<!--LOGIN-->
+
+<form id="content-login" onsubmit="return false" style="display: none">
+
+    <div class="mask">
+        <div class="center-text">
+            Loading...
+        </div>
+    </div>
+
+    <div class="title">Login</div>
+
+    <div class="error-msg"></div>
+
+    <input id="login-mail" placeholder="Email" required type="email">
+    <input id="login-password" placeholder="Password" required type="password">
+
+    <label>
+        <input id="login-remember" type="checkbox">
+        Remember me
+    </label>
+
+    <input type="submit" value="Login">
+
+    <div class="additional-button" data-ref="token">Use a token</div>
+
+    <div class="additional-button" data-ref="register">No account ? Create one</div>
+
+</form>
+
+<!--LOGIN WITH TOKEN-->
+
+<form id="content-login-token" onsubmit="return false" style="display: none">
+
+    <div class="mask">
+        <div class="center-text">
+            Loading...
+        </div>
+    </div>
+
+    <div class="title">Login with token</div>
+
+    <div class="error-msg"></div>
+
+    <input id="login-token" placeholder="Token" required type="text">
+
+    <label>
+        <input id="token-remember" type="checkbox">
+        Remember me
+    </label>
+
+    <input type="submit" value="Login">
+
+    <div class="additional-button">Use email and password</div>
+
+</form>
+
+<!--REGISTER-->
+
+<form id="content-register" onsubmit="return false" style="display: none">
+
+    <div class="mask">
+        <div class="center-text">
+            Loading...
+        </div>
+    </div>
+
+    <div class="title">Create an account</div>
+
+    <div class="error-msg"></div>
+
+    <input id="register-email" placeholder="Email" required type="email">
+
+    <input id="register-password-1" placeholder="Password" required type="password">
+    <input id="register-password-2" placeholder="Confirm password" required type="password">
+
+    <input id="register-username" placeholder="Username" required type="text">
+
+    <label>
+        <input id="register-remember" type="checkbox">
+        Remember me
+    </label>
+
+    <input type="submit" value="Create an account">
+
+    <div class="additional-button">Login</div>
+
+</form>
+
+<!--ACCOUNT DATA-->
+
+<div id="content-account" style="display: none">
+
+    <div class="mask">
+        <div class="center-text">
+            Loading...
+        </div>
+    </div>
+
+    <div class="title"></div>
+
+    <input id="account-logout" type="button" value="Logout">
+
+</div>
+
+<!--UPLOAD FLOW-->
+
+<form id="content-upload" onsubmit="return false" style="display: none">
+
+    <div class="mask">
+        <div class="center-text">
+            Loading...
+        </div>
+    </div>
+
+    <div class="title">Upload a flow</div>
+
+    <div class="error-msg"></div>
+
+    <input accept=".flo" id="upload-flow" required type="file">
+
+    <label for="upload-title">Flow name</label>
+    <input id="upload-title" required type="text">
+
+
+    <label for="upload-description">Flow description</label>
+    <br>
+    <textarea id="upload-description" required></textarea>
+    <br>
+
+    <input type="submit" value="Upload flow">
+
+
+</form>
+
+<!--GET DAILY COINS-->
+
+<div id="content-daily" style="display: none">
+
+    <div class="mask">
+        <div class="center-text">
+            Loading...
+        </div>
+    </div>
+
+    <div class="title">Get daily coins</div>
+
+    <div class="error-msg"></div>
+
+    <input type="button" value="Get sharecoins" id="daily-button">
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"></script>
+
+<script src="../javascript/account.js"></script>
+
+
+</body>
+</html>

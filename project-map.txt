@@ -1,0 +1,100 @@
+Flowshare project map
+
+--- project to do list ---
+
+- Account system
+    - Login
+        - Use token
+    - Register
+        -Confirmation code
+    -
+- Users profiles (when click on name)
+- Flows upload
+- See reviews from a flow
+- Flow  download
+- Add a review on a flow
+- Report system
+- Multi pages flow browsing
+- Flow search
+- Transactions
+- Dark theme
+
+--- files ---
+
+index.html
+    - header
+    - flow browser
+        - filters (left)
+            - top new / top rated
+            - categories
+            - min rating
+            - min downloads
+            - premium / non premium
+            - search button
+        - flows (center and right)
+            - title
+            - desc (limited size)
+            - number of ratings
+    - flow display
+        - title
+        - desc
+        - downloads
+        - comments / replies
+    - footer
+        - about project
+        - other supports
+            - automate flow
+            - mobile app
+
+
+--- API ---
+
+Register
+POST https://rasphost.com/flowshare/register.php
+Args : email, password, username
+Res : error, token
+
+Verify email code
+POST https://rasphost.com/flowshare/verify.php
+Args : email, code OR email, check
+Res : error, response
+
+Login
+POST https://rasphost.com/flowshare/login.php
+Args : email, password
+Res : error, token
+
+Account
+POST https://rasphost.com/flowshare/account.php
+Args : token
+Res : id, coins, username, password, email, token, flows, priv (see privileges), ip, banned, verified, daily
+
+Daily flowshare coins
+POST https://rasphost.com/flowshare/daily.php
+Args : token
+Res : response OR error
+
+Get flows
+GET https://rasphost.com/flowshare/flows.php?offset={page}[&rated]
+Res : [ {"id": id, "date": timestamp, "user": string, "userid": id, "title": string, "description": string, "ratings": int, "downloads": int, "lastmodified": timestamp} ]
+
+Post flow
+POST http://resphost.com/flowshare/flows.php
+Args : title, description, data (hex encoded), token, post ( = "" )
+
+Show reviews
+GET https://rasphost.com/flowshare/reviews.php?view?id=4
+Res : [ {"userid": id, "date": timestamp, "username": string, "comment": string, "isedited": 0 OR 1} ]
+
+Post review
+POST https://rasphost.com/flowshare/reviews.php
+Args : add = "", id, comment, token
+
+
+Privileges :
+0 : unverified
+1 : verified
+2 : hacker
+3 : moderator
+4 : admin
+5 : Kweezy

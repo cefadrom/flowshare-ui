@@ -1,0 +1,293 @@
+@import "common";
+@import "variables";
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: $bg-light;
+  color: #2d3436;
+  font-family: 'Barlow', sans-serif;
+  overflow: hidden auto;
+}
+
+
+// ---------- NAV ----------
+
+nav {
+  .category {
+    position: relative;
+    width: calc(100% - 60px);
+    padding: 10px 30px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  @media all and (max-height: 450px) and (min-width: 1000px) {
+    overflow: hidden auto;
+    height: calc(100% - 140px);
+  }
+
+  @media all and (max-width: 1000px) {
+    position: relative;
+    left: calc(50% - 175px);
+    top: 110px;
+  }
+
+  @media all and (max-width: 520px) {
+    top: 90px;
+  }
+
+  @media all and (max-width: 354px) {
+    width: 100%;
+    left: 0;
+  }
+}
+
+
+// ---------- CONTENT ----------
+
+#content {
+  position: relative;
+  top: 144px;
+  left: calc(10% + 350px);
+  height: auto;
+  min-height: 100px;
+  width: calc(84% - 350px);
+  background-color: $bg-dark;
+  box-shadow: 0 0 1px 1px #97a3a5;
+  transition: .4s;
+
+  @media all and (max-width: 1000px) {
+    top: 144px;
+    left: 5%;
+    width: 90%;
+  }
+
+  @media all and (max-width: 520px) {
+    top: 114px;
+  }
+
+  @media all and (max-width: 404px) {
+    width: 100%;
+    left: 0;
+  }
+}
+
+#loading-message {
+  position: relative;
+  width: content-box;
+  width: -moz-fit-content;
+  top: 45px;
+  left: 50%;
+  text-align: center;
+  transform: translate(-50%, -50%)
+}
+
+// ---------- ACCOUNT PART ----------
+
+.mask {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: none;
+  z-index: 5;
+
+  .center-text {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: fit-content;
+    width: -moz-fit-content;
+    padding: 20px;
+    text-align: center;
+    font-size: 26px;
+    background-color: rgba(253, 203, 110, 0.4);
+    box-shadow: 0 0 2px 2px rgba(253, 203, 110, 0.4);
+    border-radius: 50px;
+  }
+}
+
+#content-login,
+#content-login-token,
+#content-register,
+#content-account,
+#content-upload,
+#content-daily {
+  .title {
+    position: relative;
+    padding-top: 20px;
+    text-align: center;
+    font-size: 26px;
+  }
+}
+
+#content-login,
+#content-login-token,
+#content-register,
+#content-upload,
+#content-daily {
+  .error-msg {
+    position: relative;
+    width: 400px;
+    margin: 10px calc(50% - 200px);
+    padding-top: 20px;
+    font-size: 22px;
+    text-align: center;
+    color: red;
+  }
+}
+
+#content-login input:not([type="checkbox"]),
+#content-login label,
+#content-login-token input:not([type="checkbox"]),
+#content-login-token label,
+#content-register input:not([type="checkbox"]),
+#content-register label,
+#content-upload input,
+#content-upload label {
+  position: relative;
+  width: 380px;
+  margin: 15px calc(50% - 200px);
+  padding: 10px;
+  font-size: 24px;
+  border: none;
+  border-bottom: 1px solid $theme-color;
+  background-color: transparent;
+}
+
+#content-login,
+#content-login-token,
+#content-register,
+#content-upload {
+  label {
+    font-size: 20px;
+    border-bottom: none;
+  }
+}
+
+#content-login input[type="submit"],
+#content-login-token input[type="submit"],
+#content-register input[type="submit"],
+#content-account input,
+#content-upload input[type="submit"],
+#content-daily input {
+  position: relative;
+  text-align: center;
+  width: 300px;
+  padding: 8px 0;
+  margin: 20px calc(50% - 150px);
+  font-size: 24px;
+  background-color: transparent;
+  border: 1px solid $theme-color;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: .4s;
+}
+
+#content-login input[type="submit"]:hover,
+#content-login-token input[type="submit"]:hover,
+#content-register input[type="submit"]:hover,
+#content-account input:hover,
+#content-upload input[type="submit"]:hover,
+#content-daily input:hover {
+  background-color: $theme-color;
+}
+
+#content-login,
+#content-login-token,
+#content-register {
+  .additional-button {
+    position: relative;
+    width: 100%;
+    height: 40px;
+    font-size: 22px;
+    text-align: center;
+    overflow: hidden;
+    cursor: pointer;
+  }
+}
+
+//UPLOAD FLOW
+
+#content-upload {
+  #upload-flow {
+    font-size: 20px;
+  }
+
+  label {
+    display: block;
+    position: relative;
+    left: calc(50% - 200px);
+    margin: 20px 0 -20px;
+  }
+
+  textarea {
+    position: relative;
+    height: 150px;
+    min-height: 100px;
+    max-height: 500px;
+    width: 380px;
+    min-width: 200px;
+    max-width: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px;
+    margin: 15px 0 10px;
+    font-size: 18px;
+    font-family: 'Barlow', sans-serif;
+    border: 1px solid $theme-color;
+    background-color: transparent;
+  }
+}
+
+// -----MOBILE-----
+
+@media all and (max-width: 440px) {
+
+  #content-login,
+  #content-login-token,
+  #content-register {
+    .error-msg {
+      width: 100%;
+      margin: 10px 0;
+    }
+  }
+
+  #content-login input:not([type="checkbox"]),
+  #content-login label,
+  #content-login-token input:not([type="checkbox"]),
+  #content-login-token label,
+  #content-register input:not([type="checkbox"]),
+  #content-register label,
+  #content-upload input {
+    width: calc(100% - 20px);
+    margin: 15px 0;
+  }
+
+  #content-login input[type="submit"],
+  #content-login-token input[type="submit"],
+  #content-register input[type="submit"],
+  #content-daily input {
+    width: 80%;
+  }
+
+  // UPLOAD FLOW
+
+  #content-upload #upload-flow {
+    font-size: 16px;
+  }
+
+  #content-upload label {
+    left: 10px;
+  }
+
+  #content-upload textarea {
+    height: 300px;
+  }
+
+}

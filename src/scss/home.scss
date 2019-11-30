@@ -1,0 +1,384 @@
+@import "common";
+@import "variables";
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: $bg-light;
+  color: #2d3436;
+  font-family: 'Barlow', sans-serif;
+  overflow: hidden auto;
+}
+
+body {
+  //min-height: calc(100vh + 200px);
+  //display: table;
+}
+
+
+// ---------- FILTERS ----------
+
+nav {
+  .sub-title {
+    position: relative;
+    width: 100%;
+    padding: 15px 0 10px 20px;
+    font-size: 20px;
+  }
+
+  .response {
+    position: relative;
+    width: 100%;
+    padding: 10px 30px 10px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  #apply-filters {
+    position: relative;
+    width: 80%;
+    left: 10%;
+    top: 30px;
+    text-align: center;
+    font-size: 22px;
+    padding: 15px 0;
+    margin: 0 0 50px 0;
+    border: 2px solid $theme-color;
+    border-radius: 28px;
+    cursor: pointer;
+    transition: .4s;
+
+    &:hover {
+      background: $theme-color;
+    }
+  }
+
+  @media all and (max-height: 450px) and (min-width: 1000px) {
+    overflow: hidden auto;
+    height: calc(100% - 140px);
+  }
+
+  @media all and (max-width: 1000px) {
+    position: relative;
+    left: calc(50% - 175px);
+    top: 110px;
+  }
+
+  @media all and (max-width: 520px) {
+    top: 90px;
+  }
+
+  @media all and (max-width: 354px) {
+    width: 100%;
+    left: 0;
+  }
+}
+
+// ---------- CONTENT ----------
+
+#flow-list-container {
+  position: relative;
+  height: auto;
+  min-height: 100px;
+  left: calc(10% + 350px);
+  margin: 144px 0 50px;
+  width: calc(84% - 350px);
+  background-color: $bg-dark;
+  box-shadow: 0 0 1px 1px #97a3a5;
+  transition: .4s;
+
+  @media all and (max-width: 1000px) {
+    left: 5%;
+    width: 90%;
+  }
+
+  @media all and (max-width: 520px) {
+    margin-top: 114px;
+  }
+
+  @media all and (max-width: 404px) {
+    width: 100%;
+    left: 0;
+  }
+}
+
+#flows-loading {
+  position: absolute;
+  width: 100%;
+  top: 45px;
+  text-align: center;
+  transform: translateY(-50%)
+}
+
+// ----- FLOWS LIST -----
+
+#flow-list-container {
+  .header {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 15px;
+  }
+
+  hr {
+    opacity: .3;
+    margin-top: 0;
+  }
+}
+
+#flow-search-back-arrow {
+  font-size: 38px;
+  top: -5px;
+  left: -5px;
+}
+
+// ----- FLOW SEARCH -----
+
+.flow-container {
+  position: relative;
+  width: 100%;
+  height: 130px;
+
+  .flow-title {
+    position: absolute;
+    width: 50%;
+    height: 30px;
+    font-size: 25px;
+    padding: 5px 0 5px 20px;
+    overflow: hidden;
+  }
+
+  .flow-author {
+    position: absolute;
+    height: 30px;
+    right: 20px;
+    font-size: 20px;
+    padding: 5px 0;
+    text-align: right;
+    overflow: hidden;
+  }
+
+  .flow-description {
+    position: absolute;
+    width: 80%;
+    height: 70px;
+    top: 30px;
+    font-size: 18px;
+    padding: 10px 15px;
+    overflow: hidden;
+    white-space: pre-wrap;
+    line-height: 27px;
+  }
+
+  .flow-downloads {
+    position: absolute;
+    height: 25px;
+    font-size: 20px;
+    top: 40px;
+    right: 20px;
+    text-align: right;
+  }
+
+  .flow-rating {
+    position: absolute;
+    height: 25px;
+    font-size: 20px;
+    top: 75px;
+    right: 20px;
+    text-align: right;
+
+    i {
+      position: relative;
+    }
+
+  }
+
+}
+
+.flow-container .number-container,
+#flow-data .number-container {
+  position: relative;
+  margin-left: 3px;
+  display: inline-block;
+  font-style: unset;
+  font-weight: normal;
+  font-family: 'Barlow', sans-serif;
+}
+
+// ----- SINGLE FLOW DETAILS -----
+
+#flow-data {
+  position: absolute;
+  top: 144px;
+  left: calc(10% + 348px);
+  width: calc(84% - 350px);
+  background-color: $bg-dark;
+  box-shadow: 0 0 1px 1px #97a3a5;
+  transition: .4s;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+
+  @media all and (max-width: 1000px) {
+    top: 144px;
+    left: 5%;
+    width: 90%;
+  }
+
+  @media all and (max-width: 500px) {
+    top: 114px;
+  }
+
+  @media all and (max-width: 404px) {
+    width: 100%;
+    left: 0;
+  }
+}
+
+.back-arrow {
+  position: relative;
+  font-size: 45px;
+  top: 5px;
+  left: 5px;
+  cursor: pointer;
+  float: left;
+  z-index: 1;
+
+  &:hover {
+    animation: .5s ease 0s 1 rotationShake
+  }
+}
+
+@keyframes rotationShake {
+  from {
+    transform: rotate(0);
+  }
+  33% {
+    transform: rotate(20deg);
+  }
+  66% {
+    transform: rotate(-20deg);
+  }
+  to {
+    transform: rotate(0);
+  }
+}
+
+#flow-data {
+  .flow-title {
+    position: relative;
+    font-size: 30px;
+    left: 15px;
+    top: 7px;
+    font-weight: 600;
+  }
+
+  .flow-author {
+    position: relative;
+    font-size: 22px;
+    padding: 15px 10px;
+  }
+
+  .flow-description {
+    position: relative;
+    font-size: 25px;
+    padding: 15px 10px;
+    white-space: pre-wrap;
+  }
+}
+
+@media all and (max-width: 500px) {
+
+  .back-arrow {
+    font-size: 35px;
+  }
+
+  #flow-data {
+    .flow-title {
+      font-size: 24px;
+      left: 10px;
+    }
+
+    .flow-author {
+      font-size: 20px;
+    }
+
+    .flow-description {
+      font-size: 22px;
+    }
+  }
+
+}
+
+#flow-data #flow-data-bar {
+  div {
+    position: relative;
+    height: 18px;
+    width: 15%;
+    margin: 0 3%;
+    padding: 15px 2%;
+    text-align: center;
+    overflow: hidden;
+    float: left;
+
+    @media all and (max-width: 900px) {
+      width: 30%;
+      margin: 0 6%;
+      padding: 15px 4%;
+    }
+
+    @media all and (min-width: 1000px) and (max-width: 1350px) {
+      width: 30%;
+      margin: 0 6%;
+      padding: 15px 4%;
+    }
+
+  }
+
+  *:not(#download-button, #review-button) {
+    font-size: 18px;
+  }
+}
+
+#download-button, #review-button {
+  border: 1px solid $theme-color;
+  border-radius: 22px;
+  cursor: pointer;
+  font-size: 18px;
+
+@media all and (max-width: 430px) {
+    font-size: 15px;
+  }
+}
+
+//RATINGS
+
+.rating-container {
+  position: relative;
+  padding: 15px;
+
+  .rating-title {
+    position: relative;
+    margin: 10px 0;
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  .rating-body {
+    position: relative;
+    font-size: 20px;
+  }
+}
+
+// ---------- FOOTER ----------
+
+footer {
+  display: table-row;
+  position: relative;
+  bottom: 0;
+  width: 100vw;
+  height: 200px;
+  background-color: $theme-color;
+}

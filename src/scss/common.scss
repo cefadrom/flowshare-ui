@@ -1,0 +1,254 @@
+@import "variables";
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+// ----------- HEADER ----------
+
+header {
+  width: 100%;
+  height: 80px;
+  top: 0;
+  background: $bg-dark;
+  position: fixed;
+  box-shadow: 0 2px 2px #97a3a5;
+  z-index: 3;
+
+  #logo-big {
+    background-image: url('../img/flowshare-wide.png');
+    //background-image: url('../img/new-logo.png');
+    background-size: cover;
+    position: relative;
+    left: 50px;
+    height: 70px;
+    width: 305px;
+    //width: 150px;
+    margin: 5px;
+    float: left;
+  }
+
+  // ----- SEARCH BOX -----
+
+  #search-box {
+    position: absolute;
+    top: 19px;
+    right: 200px;
+    left: unset;
+    background-color: inherit;
+    border: 1px solid #2d3436;
+    border-radius: 20px;
+    transition: .4s;
+  }
+
+  #search-btn {
+    color: $theme-color;
+    float: right;
+    width: 40px;
+    height: 40px;
+    text-decoration: none;
+    font-size: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .4s;
+    cursor: pointer;
+  }
+
+  #search-txt {
+    position: relative;
+    left: 15px;
+    width: 230px;
+    border: none;
+    background: none;
+    outline: none;
+    font-size: 20px;
+    transition: .4s;
+    line-height: 40px;
+  }
+
+  #search-results {
+    position: relative;
+    width: calc(100% - 16px);
+    height: auto;
+    padding: 0;
+  }
+}
+
+#search-results .result {
+  position: relative;
+  width: 100%;
+  height: 25px;
+  font-size: 18px;
+  opacity: .9;
+  margin: 10px 0;
+  cursor: pointer;
+}
+
+// ----- ACCOUNT / HOME BUTTON -----
+
+header {
+
+  #header-account, #header-home {
+    position: relative;
+    right: 50px;
+    float: right;
+    height: 60px;
+    width: 80px;
+    margin: 10px;
+    cursor: pointer;
+    text-align: center;
+    line-height: 25px;
+    font-size: 18px;
+
+    i {
+      font-size: 40px;
+    }
+
+  }
+
+  #header-account-popup {
+    position: absolute;
+    height: fit-content;
+    width: fit-content;
+    width: -moz-fit-content;
+    top: 95px;
+    right: 60px;
+    padding: 10px 15px;
+    font-size: 20px;
+    background-color: $bg-dark;
+    box-shadow: 0 0 2px 2px #b9b9b9;
+    border-radius: 10px;
+    cursor: pointer;
+    display: none;
+
+    &:before {
+      content: "";
+      position: absolute;
+      top: -5px;
+      right: 10px;
+      width: 18px;
+      height: 18px;
+      background-color: inherit;
+      transform: rotate(45deg);
+    }
+
+  }
+
+}
+
+// ----- MOBILE RESPONSIBILITY -----
+
+@media all and (max-width: 900px) {
+
+  header {
+
+    #logo-big {
+      left: 10px;
+    }
+
+    #search-box {
+      right: 120px;
+    }
+
+    #header-account, #header-home {
+      right: 10px;
+    }
+
+    #header-account-popup {
+      right: 20px;
+    }
+
+  }
+
+}
+
+@media all and (max-width: 750px) {
+
+  header #search-txt {
+    width: 0;
+  }
+
+}
+
+@media all and (max-width: 520px) {
+
+  header {
+    height: 60px;
+
+    #logo-big {
+      background-image: url('../img/flowshare-square.png');
+      width: 50px;
+      height: 50px;
+      left: 20px;
+    }
+
+    #search-box {
+      top: 9px;
+    }
+
+    #header-account, #header-home {
+      height: 50px;
+      margin: 5px 10px;
+      font-size: 16px;
+      line-height: 16px;
+
+      i {
+        font-size: 35px;
+      }
+
+    }
+
+    #header-account-popup {
+      top: 75px;
+      font-size: 16px;
+    }
+
+  }
+
+}
+
+
+// ---------- NAV ----------
+
+
+nav {
+  position: fixed;
+  top: 144px;
+  left: 5%;
+  height: 310px;
+  width: 350px;
+  background-color: $bg-dark;
+  box-shadow: 0 0 1px 1px #97a3a5;
+  transition: .4s;
+  overflow: hidden;
+
+  .title {
+    position: relative;
+    height: 35px;
+    width: 100%;
+    padding: 15px 0;
+    text-align: center;
+    font-size: 24px;
+  }
+
+  #nav-arrow {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 30px;
+    cursor: pointer;
+    transition: .4s;
+    display: none;
+
+    &.active {
+      transform: rotate(-0.5turn);
+    }
+  }
+}

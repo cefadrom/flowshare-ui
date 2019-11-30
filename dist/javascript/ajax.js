@@ -1,0 +1,2 @@
+"use strict";var flowshareURLs={homepage:"https://rasphost.com/flowshare/web/test/home/",homepageDir:"/flowshare/web/test/home/",api:"https://rasphost.com/flowshare/"},ajaxRequest=function(a){var b=a.data,c=a.error,d=a.json,e=a.method,f=a.timeout,g=a.url;$.ajax({url:"".concat(flowshareURLs.api).concat(g,".php"),method:e,data:b,timeout:f,error:function error(a){console.error("Ajax error",a),c(a)},success:function success(b){var c=b;if(d)try{c=JSON.parse(b)}catch(a){console.error("JSON parse error",a)}a.success(c)}})};
+//# sourceMappingURL=ajax.js.map
