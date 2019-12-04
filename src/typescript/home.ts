@@ -86,32 +86,6 @@ $(function () {
 
         headerAccountUser.text('Connecting...');
 
-        ajaxRequest({
-            url: 'account',
-            method: 'GET',
-            json: true,
-            data: {
-                token: account['token'],
-            },
-            success: (data: AccountData) => {
-                if (data['error']) {
-                    headerAccountUser.text('Account');
-                    toggleAccountPopup(true, data['error'], '#ff5b5f');
-                    setTimeout(toggleAccountPopup, 8000, false);
-
-                    if (!Cookies.getJSON('account')['email'])
-                        Cookies.remove('account');
-                }
-
-                headerAccountUser.text(data['username']);
-
-            },
-            error: () => {
-                toggleAccountPopup(true, 'AJAX error', '#ff5b5f');
-                setTimeout(toggleAccountPopup, 8000, false);
-            },
-        });
-
         //     $.ajax({
         //         method: 'GET',
         //         url: `${flowshareURLs.api}account.php`,

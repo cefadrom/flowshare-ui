@@ -4,8 +4,8 @@ interface QuerySettings {
     data?: Object;
     timeout?: number;
     json?: boolean;
-    success: CallableFunction;
-    error: CallableFunction;
+    success: (data: any) => void;
+    error: (error: any) => void;
 }
 declare const flowshareURLs: {
     homepage: string;
