@@ -95,21 +95,6 @@ nav {
   background-color: rgba(0, 0, 0, 0.3);
   display: none;
   z-index: 5;
-
-  .center-text {
-    position: relative;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: fit-content;
-    width: -moz-fit-content;
-    padding: 20px;
-    text-align: center;
-    font-size: 26px;
-    background-color: rgba(253, 203, 110, 0.4);
-    box-shadow: 0 0 2px 2px rgba(253, 203, 110, 0.4);
-    border-radius: 50px;
-  }
 }
 
 #content-login,

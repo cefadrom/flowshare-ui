@@ -78,7 +78,7 @@ $(function () {
     // ---------------------------------------- CHECKING ACCOUNT ----------------------------------------
     // --------------------------------------------------------------------------------------------------
 
-    let account = Cookies.getJSON('account'),
+    let account: AccountCookie = Cookies.getJSON('account'),
         accountPopup = $('#header-account-popup'),
         headerAccountUser = $('#header-account-user');
 
@@ -86,38 +86,38 @@ $(function () {
 
         headerAccountUser.text('Connecting...');
 
-        //     $.ajax({
-        //         method: 'GET',
-        //         url: `${flowshareURLs.api}account.php`,
-        //         data: {
-        //             token: account['token']
-        //         },
-        //         success: (data: string) => {
-        //
-        //             let reqData: AccountData;
-        //             try {
-        //                 reqData = JSON.parse(data);
-        //             } catch (e) {
-        //                 return console.error(e);
-        //             }
-        //
-        //             if (reqData['error']) {
-        //                 headerAccountUser.text('Account');
-        //                 toggleAccountPopup(true, reqData['error'], '#ff5b5f');
-        //                 setTimeout(toggleAccountPopup, 8000, false);
-        //
-        //                 if (!Cookies.getJSON('account')['email']) Cookies.remove('account');
-        //
-        //             }
-        //
-        //             headerAccountUser.text(reqData['username']);
-        //
-        //         },
-        //         error: () => {
-        //             toggleAccountPopup(true, 'AJAX error', '#ff5b5f');
-        //             setTimeout(toggleAccountPopup, 8000, false);
-        //         }
-        //     })
+        $.ajax({
+            method: 'GET',
+            url: `${flowshareURLs.api}account.php`,
+            data: {
+                token: account['token'],
+            },
+            success: (data: string) => {
+
+                let reqData: AccountData;
+                try {
+                    reqData = JSON.parse(data);
+                } catch (e) {
+                    return console.error(e);
+                }
+
+                if (reqData['error']) {
+                    headerAccountUser.text('Account');
+                    toggleAccountPopup(true, reqData['error'], '#ff5b5f');
+                    setTimeout(toggleAccountPopup, 8000, false);
+
+                    if (!Cookies.getJSON('account')['email']) Cookies.remove('account');
+
+                }
+
+                headerAccountUser.text(reqData['username']);
+
+            },
+            error: () => {
+                toggleAccountPopup(true, 'AJAX error', '#ff5b5f');
+                setTimeout(toggleAccountPopup, 8000, false);
+            },
+        });
 
     }
 
