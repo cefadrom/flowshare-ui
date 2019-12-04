@@ -4,10 +4,8 @@
   "description": "The web user interface of the flowshare project",
   "main": "index.js",
   "scripts": {
-    "type-check": "tsc --noEmit",
-    "type-check:watch": "yarn type-check -- --watch",
     "build": "yarn build:typescript && npm run build:babel && yarn build:scss",
-    "build:javascript": "yarn build:typescript && npm run build:babel",
+    "build:javascript": "yarn build:typescript && yarn build:babel",
     "build:typescript": "tsc --emitDeclarationOnly",
     "build:babel": "babel src/typescript --out-dir dist/javascript --extensions \".ts,.tsx\" --source-maps true",
     "build:scss": "sass src/scss:dist/css --style=compressed && postcss dist/css/*.css --replace --no-map --use autoprefixer"
