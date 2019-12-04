@@ -92,7 +92,6 @@ $(function () {
      * Displays the selected category in the content window
      * @param name HTML ID of the element to display
      */
-
     function setCategory(name: string) {
 
         $('#content').html('');
@@ -174,7 +173,6 @@ $(function () {
      * If data is supplied, just displays it in the content
      * @param data
      */
-
     function displayAccountData(data?: AccountData) {
 
         contentDiv.html('<div id="loading-message">Loading data...</div>');
@@ -246,7 +244,6 @@ $(function () {
      * @param error displays the error if there is one
      * @param email pre-fill the email if we know it
      */
-
     function displayLoginForm(error?: string | null, email?: string) {
 
         contentDiv.html('');

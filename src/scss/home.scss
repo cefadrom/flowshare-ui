@@ -220,6 +220,7 @@ nav {
   overflow: hidden;
   opacity: 0;
   pointer-events: none;
+  z-index: 2;
 
   @media all and (max-width: 1000px) {
     top: 144px;
@@ -375,8 +376,10 @@ nav {
 // ---------- FOOTER ----------
 
 footer {
-  display: table-row;
-  position: relative;
+  //display: table-row;
+  //position: relative;
+  position: absolute;
+  margin-bottom: -200px;
   bottom: 0;
   width: 100vw;
   height: 200px;

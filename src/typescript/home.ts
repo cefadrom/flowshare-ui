@@ -71,6 +71,8 @@ $(function () {
 
         flowDataWindowResize();
 
+        footerWindowResize();
+
     });
 
 
@@ -150,7 +152,6 @@ $(function () {
     /**
      * Function triggered when the window width changes, in order to define if the search bar can be resized when hover
      */
-
     function searchBarWindowResize() {
         allowSearchBarResize = windowWidth < 750;
     }
@@ -169,7 +170,6 @@ $(function () {
      * @param showFull `true` : extend bar, `false` : collapse it
      * @param force ignore the `allowSearchBarResize` variable if true
      */
-
     function searchBarResize(showFull: boolean, force?: boolean) { // manage search bar on mobile (takes entire screen when focused)
 
         if (!allowSearchBarResize && !force) return;    // if can't be resized (screen is too big)
@@ -247,7 +247,6 @@ $(function () {
      * Display the result of the instant search below the search box
      * @param str the term to search
      */
-
     function instantSearch(str: string) {
 
         if (str.length > 31) return displayResult(null, 'Text is too long');
@@ -338,7 +337,6 @@ $(function () {
     /**
      * Add the trigger so that when the back arrow is pressed, it applies the filter
      */
-
     function flowSearchBackArrowPress(): void {   // when back arrow pressed on search list
         $('#flow-search-back-arrow').off('click.flowshare').on('click.flowshare', () => {
             applyFilters(true);
@@ -431,7 +429,6 @@ $(function () {
      * @param displayType filter value type
      * @return boolean true if the filter is applied, otherwise false
      */
-
     function displayFilters(name: string, value: string, displayType: string): boolean {
         let result = false;
 
@@ -475,7 +472,6 @@ $(function () {
     /**
      * Function triggered when the window width changes, in order to define the position of the filter and if it can be extended
      */
-
     function filterWindowResize() {
         if (windowWidth < 1000) {
             extentFilter(true);
@@ -494,7 +490,6 @@ $(function () {
      * Extend of collapse the filter
      * @param extend `true` to extend, `false` to collapse
      */
-
     function extentFilter(extend: boolean): void {
         if (!allowFilterExtend) return;
         if (extend) {
@@ -535,7 +530,6 @@ $(function () {
      * Update the URL with the new filters (without the search)
      * @param reload if the page needs to be reloaded or if the URL needs to be changed dynamically
      */
-
     function applyFilters(reload: boolean): void {
         let searchTags = new URLSearchParams();
         delete searchFilters.search;
@@ -573,7 +567,6 @@ $(function () {
      * Query the flows and display them in the flow container list
      * @param queryMode `new` or `null` for the top new, `rated` for the top rated
      */
-
     function queryTopFlows(queryMode?: string) {
 
         let data: any = { offset: flowBrowserOffset };
@@ -745,7 +738,6 @@ $(function () {
     /**
      * Set the trigger so when a flow is selected in the flow list, its full data is displayed in the foreground
      */
-
     function triggerFlowContainerClick() {
 
         $('.flow-container').off('click.flowshare').on('click.flowshare', function () {
@@ -766,7 +758,6 @@ $(function () {
      * @param flowData the flow data
      * @param flowID the flow ID on flowshare
      */
-
     function displayFullFlowData(flowData: Flow, flowID: string) {
 
         $('#flow-data')
@@ -868,7 +859,6 @@ $(function () {
     /**
      * Set the trigger so when the back arrow is pressed on full flow data display, it goes back on the flow list
      */
-
     function flowBackArrowClick() {
         $('#full-flow-data-back-arrow')
             .off('click.flowshare')
@@ -892,7 +882,6 @@ $(function () {
     /**
      * Function triggered when the window width changes on the full flow data display, in order to fix a margin bug for the review button
      */
-
     function flowDataWindowResize() {
 
         // fix margin bug with review button
@@ -912,7 +901,6 @@ $(function () {
      * @param data the ratings data, `null` if an error
      * @param error the error message to display (if there is one)
      */
-
     function displayFlowReviews(data: FlowReview[] | null, error?: string) {
 
         if (data === null) return;
@@ -961,7 +949,6 @@ $(function () {
      * @param id flow id
      * @param title name of the file
      */
-
     function downloadFlow(id: string | number, title: string) {
         $.ajax({
             method: 'GET',
@@ -983,10 +970,35 @@ $(function () {
 
                 document.body.removeChild(element);
             },
-            error: () => {
-                alert('Download error');
+            error: (e) => {
+                alert(`Download error : ${e}`);
             },
         });
+    }
+
+
+    // -----------------------------------------------------------------------------------------------
+    // ---------------------------------------- MANAGE FOOTER ----------------------------------------
+    // -----------------------------------------------------------------------------------------------
+
+    footerWindowResize();
+
+    function footerWindowResize() {
+
+        const footerDiv = $('footer');
+        //TODO: find the position of the lowest element
+        console.log(windowHeight - 200);
+        console.log(footerDiv.position().top);
+
+        if (windowHeight - 200 > footerDiv.position().top)
+            footerDiv.css({
+                position: 'absolute',
+            });
+        else
+            footerDiv.css({
+                position: 'relative',
+            });
+
     }
 
 });
