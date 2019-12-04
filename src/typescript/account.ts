@@ -44,7 +44,7 @@ $(function () {
     const flowshareURLs = {
         homepage: 'https://rasphost.com/flowshare/web/test/home/',
         homepageDir: '/flowshare/web/test/home/',
-        api: 'https://rasphost.com/flowshare/'
+        api: 'https://rasphost.com/flowshare/',
     };
 
 
@@ -132,11 +132,11 @@ $(function () {
         if (windowWidth < 1000) {
             extentNav(true);
             allowNavExtend = true;
-            $('#nav-arrow').show()
+            $('#nav-arrow').show();
         } else {
             extentNav(false);
             allowNavExtend = false;
-            $('#nav-arrow').hide()
+            $('#nav-arrow').hide();
         }
         isNavExtended = <number>$('nav').height() < 100;
     }
@@ -181,7 +181,7 @@ $(function () {
 
         categoryDiv.css({
             cursor: 'pointer',
-            opacity: '1'
+            opacity: '1',
         });
         allowChoseCategory = true;
 
@@ -192,7 +192,7 @@ $(function () {
         $.ajax({
             method: 'GET',
             url: `${flowshareURLs.api}account.php`,
-            data: {token: account['token']},
+            data: { token: account['token'] },
             success: (data: string) => {
 
                 let reqData: AccountData;
@@ -209,7 +209,7 @@ $(function () {
             },
             error: () => {
                 $('#loading-message').text('AJAX error. Please reload the page.');
-            }
+            },
         });
 
         function displayContent(data: AccountData) {
@@ -217,13 +217,13 @@ $(function () {
             contentDiv.html('');
 
             let account: AccountCookie = Cookies.getJSON('account');
-            let cookieExpires = account.expires === 0 ? undefined : {expires: account.expires};
+            let cookieExpires = account.expires === 0 ? undefined : { expires: account.expires };
             let newCookie: AccountCookie = Object.assign(
                 account,
                 {
                     email: data['email'],
-                    username: data['username']
-                }
+                    username: data['username'],
+                },
             );
             Cookies.set('account', newCookie, cookieExpires);
 
@@ -233,7 +233,7 @@ $(function () {
             $('#account-logout').on('click.flowshare', function () {
                 Cookies.remove('account');
                 displayLoginForm(null, data['email']);
-            })
+            });
 
         }
 
@@ -253,7 +253,7 @@ $(function () {
 
         categoryDiv.css({
             cursor: 'not-allowed',
-            opacity: '.6'
+            opacity: '.6',
         });
 
         allowChoseCategory = false;
@@ -282,7 +282,7 @@ $(function () {
                 url: `${flowshareURLs.api}login.php`,
                 data: {
                     email: $('#login-mail').val(),
-                    password: $('#login-password').val()
+                    password: $('#login-password').val(),
                 },
                 success: (data: string) => {
                     loginResult(data);
@@ -290,8 +290,8 @@ $(function () {
                 error: (e) => {
                     mask.fadeOut();
                     displayError(`AJAX error: response status ${e.status}. Please try later or contact the administrator`);
-                }
-            })
+                },
+            });
 
         });
 
@@ -321,11 +321,11 @@ $(function () {
 
             let args: { expires: number } | undefined;
             if ($('#content-login #login-remember:checked').length) // if the user checked the "remember me" option
-                args = {expires: 365};
+                args = { expires: 365 };
 
             Cookies.set('account', {
                 token: reqData['token'],
-                expires: args ? 365 : 0
+                expires: args ? 365 : 0,
             }, args);
 
             displayAccountData();
@@ -351,7 +351,7 @@ $(function () {
 
         categoryDiv.css({
             cursor: 'not-allowed',
-            opacity: '.6'
+            opacity: '.6',
         });
 
         allowChoseCategory = false;
@@ -368,7 +368,7 @@ $(function () {
                 method: 'GET',
                 url: `${flowshareURLs.api}account.php`,
                 data: {
-                    token: $('#login-token').val()
+                    token: $('#login-token').val(),
                 },
                 timeout: 5000,
                 success: (data: string) => {
@@ -378,8 +378,8 @@ $(function () {
                 error: (e) => {
                     mask.fadeOut();
                     displayError(`AJAX error : response code ${e.status}. Please try later or contact the administrator`);
-                }
-            })
+                },
+            });
 
         });
 
@@ -404,14 +404,14 @@ $(function () {
 
             let args: { expires: number } | undefined;
             if ($('#content-login-token #token-remember:checked').length > 0)
-                args = {expires: 365};
+                args = { expires: 365 };
 
             console.log(args);
 
             Cookies.set('account', {
                 token: $('#login-token').val(),
                 username: reqData['username'],
-                expires: args ? 365 : 0
+                expires: args ? 365 : 0,
             }, args);
 
             displayAccountData(reqData);
@@ -433,7 +433,7 @@ $(function () {
 
         categoryDiv.css({
             cursor: 'not-allowed',
-            opacity: '.6'
+            opacity: '.6',
         });
 
         allowChoseCategory = false;
@@ -450,7 +450,7 @@ $(function () {
             let requestData = {
                 email: $('#register-email').val(),
                 password: $('#register-password-1').val(),
-                username: $('#register-username').val()
+                username: $('#register-username').val(),
             };
 
             if (requestData.password !== $('#register-password-2').val())   // if password != password confirmation
@@ -510,7 +510,7 @@ $(function () {
                 // @ts-ignore
                 flowData = fr.result.split(';base64,')[1];
                 if (uploadTitle.val() === '')
-                    uploadTitle.val(file.name.split('.flo')[0])
+                    uploadTitle.val(file.name.split('.flo')[0]);
             };
             fr.readAsDataURL(file);
 
@@ -520,8 +520,8 @@ $(function () {
             uploadFlow(
                 <string>uploadTitle.val(),
                 <string>uploadDescription.val(),
-                flowData
-            )
+                flowData,
+            );
         });
 
         function uploadFlow(title: string, description: string, data: string) {
@@ -538,7 +538,7 @@ $(function () {
                     data: data,
                     base64: '',
                     token: token,
-                    post: ''
+                    post: '',
                 },
                 timeout: 10000,
                 success: (data: string) => {
@@ -558,7 +558,7 @@ $(function () {
                 error: (e) => {
                     mask.fadeOut();
                     errorMsg.text(`AJAX error, response code ${e.status}, please try again.`);
-                }
+                },
             });
 
             function loadResponse(data: FlowUploadResult) {
@@ -566,8 +566,8 @@ $(function () {
                 if (data.error) return errorMsg.text(data.error);
 
                 $('#content').html(
-                    `<div id="loading-message">Response: ${data.response}${data.id ? `, flow id: ${data.id}` : ''}</div>`
-                )
+                    `<div id="loading-message">Response: ${data.response}${data.id ? `, flow id: ${data.id}` : ''}</div>`,
+                );
 
             }
 
@@ -599,7 +599,7 @@ $(function () {
                 method: 'POST',
                 url: `${flowshareURLs.api}daily.php`,
                 data: {
-                    token: token
+                    token: token,
                 },
                 timeout: 5000,
                 success: function (data) {
@@ -609,7 +609,7 @@ $(function () {
                     try {
                         data = JSON.parse(data);
                     } catch (e) {
-                        return errorMsg.text(`JSON parse error, response: ${data}`)
+                        return errorMsg.text(`JSON parse error, response: ${data}`);
                     }
 
                     if (data['error'])
@@ -619,16 +619,16 @@ $(function () {
 
                     errorMsg
                         .css('color', '#3bce38')
-                        .text(data.response)
+                        .text(data.response);
 
                 },
                 error: function (e) {
                     mask.fadeOut();
                     errorMsg.text(`AJAX error, response code ${e.status}. Please try later`);
-                }
-            })
+                },
+            });
 
-        })
+        });
 
     }
 

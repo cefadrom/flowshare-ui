@@ -12,7 +12,7 @@ interface QuerySettings {
 const flowshareURLs = {
     homepage: 'https://rasphost.com/flowshare/web/test/home/',
     homepageDir: '/flowshare/web/test/home/',
-    api: 'https://rasphost.com/flowshare/'
+    api: 'https://rasphost.com/flowshare/',
 };
 
 /**
@@ -20,7 +20,7 @@ const flowshareURLs = {
  * @param params
  */
 const ajaxRequest = (params: QuerySettings) => {
-    let {data, error, json, method, timeout, url: path} = params;
+    let { data, error, json, method, timeout, url: path } = params;
     $.ajax({
         url: `${flowshareURLs.api}${path}.php`,
         method,
@@ -39,6 +39,6 @@ const ajaxRequest = (params: QuerySettings) => {
                     console.error('JSON parse error', e);
                 }
             params.success(<string>data);
-        }
+        },
     });
 };

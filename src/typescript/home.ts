@@ -57,7 +57,7 @@ $(function () {
     const flowshareURLs = {
         homepage: 'https://rasphost.com/flowshare/web/test/home/',
         homepageDir: '/flowshare/web/test/home/',
-        api: 'https://rasphost.com/flowshare/'
+        api: 'https://rasphost.com/flowshare/',
     };
 
     $(window).on('resize', () => {
@@ -91,7 +91,7 @@ $(function () {
             method: 'GET',
             json: true,
             data: {
-                token: account['token']
+                token: account['token'],
             },
             success: (data: AccountData) => {
                 if (data['error']) {
@@ -109,41 +109,41 @@ $(function () {
             error: () => {
                 toggleAccountPopup(true, 'AJAX error', '#ff5b5f');
                 setTimeout(toggleAccountPopup, 8000, false);
-            }
+            },
         });
 
-    //     $.ajax({
-    //         method: 'GET',
-    //         url: `${flowshareURLs.api}account.php`,
-    //         data: {
-    //             token: account['token']
-    //         },
-    //         success: (data: string) => {
-    //
-    //             let reqData: AccountData;
-    //             try {
-    //                 reqData = JSON.parse(data);
-    //             } catch (e) {
-    //                 return console.error(e);
-    //             }
-    //
-    //             if (reqData['error']) {
-    //                 headerAccountUser.text('Account');
-    //                 toggleAccountPopup(true, reqData['error'], '#ff5b5f');
-    //                 setTimeout(toggleAccountPopup, 8000, false);
-    //
-    //                 if (!Cookies.getJSON('account')['email']) Cookies.remove('account');
-    //
-    //             }
-    //
-    //             headerAccountUser.text(reqData['username']);
-    //
-    //         },
-    //         error: () => {
-    //             toggleAccountPopup(true, 'AJAX error', '#ff5b5f');
-    //             setTimeout(toggleAccountPopup, 8000, false);
-    //         }
-    //     })
+        //     $.ajax({
+        //         method: 'GET',
+        //         url: `${flowshareURLs.api}account.php`,
+        //         data: {
+        //             token: account['token']
+        //         },
+        //         success: (data: string) => {
+        //
+        //             let reqData: AccountData;
+        //             try {
+        //                 reqData = JSON.parse(data);
+        //             } catch (e) {
+        //                 return console.error(e);
+        //             }
+        //
+        //             if (reqData['error']) {
+        //                 headerAccountUser.text('Account');
+        //                 toggleAccountPopup(true, reqData['error'], '#ff5b5f');
+        //                 setTimeout(toggleAccountPopup, 8000, false);
+        //
+        //                 if (!Cookies.getJSON('account')['email']) Cookies.remove('account');
+        //
+        //             }
+        //
+        //             headerAccountUser.text(reqData['username']);
+        //
+        //         },
+        //         error: () => {
+        //             toggleAccountPopup(true, 'AJAX error', '#ff5b5f');
+        //             setTimeout(toggleAccountPopup, 8000, false);
+        //         }
+        //     })
 
     }
 
@@ -186,7 +186,7 @@ $(function () {
             searchBarResize(true);
         })
         .on('mouseout', () => {
-            searchBarResize(false)
+            searchBarResize(false);
         });
 
 
@@ -205,7 +205,7 @@ $(function () {
             $('#logo-big, #header-account').fadeOut(400);   // makes logo and account disappear
             $('#search-box').css({  // expand global div
                 width: '280px',
-                right: 'calc((100% - 280px) / 2)'
+                right: 'calc((100% - 280px) / 2)',
             });
             $('#search-txt').css('width', '230px'); // expand search field
             resultContainer.show(); // shows results
@@ -223,7 +223,7 @@ $(function () {
             $('#search-box')
                 .css({  // collapse global div
                     width: 'auto',
-                    right: '120px'
+                    right: '120px',
                 })
                 .trigger('blur');    // remove the focus
             $('#search-txt').css('width', '0');     // collapse search field
@@ -247,8 +247,8 @@ $(function () {
                     .css('padding', '0')
                     .html('');
             },
-            100
-        )
+            100,
+        );
 
     });
 
@@ -286,7 +286,7 @@ $(function () {
 
                 let reqData: any;
                 try {
-                    reqData = JSON.parse(data)
+                    reqData = JSON.parse(data);
                 } catch (e) {
                     return displayResult(null, 'JSON parse error');
                 }
@@ -299,7 +299,7 @@ $(function () {
             },
             error: () => {
                 displayResult(null, 'AJAX error');
-            }
+            },
         });
 
         // Format result
@@ -312,13 +312,13 @@ $(function () {
                 .html('');
 
             if (error) return resultContainer.append(
-                $('<div class="result" style="cursor: default;"></div>').text(error)
+                $('<div class="result" style="cursor: default;"></div>').text(error),
             );
 
             $.each(flowsData, function (ind: string, val: Flow) {
 
                 resultContainer.append(
-                    $(`<div class="result" data-flow-index="${ind}" data-flow-id="${val.id}"></div>`).text(val.title)
+                    $(`<div class="result" data-flow-index="${ind}" data-flow-id="${val.id}"></div>`).text(val.title),
                 );
 
             });
@@ -330,7 +330,7 @@ $(function () {
 
                 displayFullFlowData(flowData, flowID);
 
-            })
+            });
 
         }
 
@@ -400,7 +400,7 @@ $(function () {
     } = {
         sort: null,
         id: null,
-        search: null
+        search: null,
     };
 
     let defaultFilterValues: {
@@ -415,19 +415,19 @@ $(function () {
             default: 'new',
             display: true,
             displayType: 'filter',
-            type: 'string'
+            type: 'string',
         },
         id: {
             default: undefined,
             display: false,
-            type: 'int'
+            type: 'int',
         },
         search: {
             default: undefined,
             display: true,
             displayType: 'search',
-            type: 'string'
-        }
+            type: 'string',
+        },
     };
 
     let searchTags = new URLSearchParams(window.location.search);
@@ -506,11 +506,11 @@ $(function () {
         if (windowWidth < 1000) {
             extentFilter(true);
             allowFilterExtend = true;
-            $('#nav-arrow').show()
+            $('#nav-arrow').show();
         } else {
             extentFilter(false);
             allowFilterExtend = false;
-            $('#nav-arrow').hide()
+            $('#nav-arrow').hide();
         }
         isFilterExtended = <number>$('nav').width() < 100;
     }
@@ -602,7 +602,7 @@ $(function () {
 
     function queryTopFlows(queryMode?: string) {
 
-        let data: any = {offset: flowBrowserOffset};
+        let data: any = { offset: flowBrowserOffset };
 
         if (queryMode === 'rated')
             data['rated'] = 1;
@@ -624,8 +624,8 @@ $(function () {
             },
             error: () => {
                 $('#flows-loading').html('Error when getting flows list: AJAX error<br>Please reload page or contact the site administrator.');
-            }
-        })
+            },
+        });
     }
 
     function querySearchFlow(str: string) {
@@ -635,7 +635,7 @@ $(function () {
             url: `${flowshareURLs.api}search.php`,
             data: {
                 text: str,
-                offset: flowBrowserOffset
+                offset: flowBrowserOffset,
             },
             timeout: 5000,
             success: (data: string) => {
@@ -650,7 +650,7 @@ $(function () {
             },
             error: () => {
                 $('#flows-loading').html('Error when getting flows list: AJAX error<br>Please reload page or contact the site administrator.');
-            }
+            },
         });
 
     }
@@ -690,7 +690,7 @@ $(function () {
             let backButton = showBackButton ? '<i class="fas fa-chevron-circle-left back-arrow" id="flow-search-back-arrow"></i>' : '';
 
             flowContainerList.append(
-                $(`<div class="header">${backButton}${resultCount}${header}</div><hr>`)
+                $(`<div class="header">${backButton}${resultCount}${header}</div><hr>`),
             );
 
             if (showBackButton) flowSearchBackArrowPress();
@@ -704,29 +704,29 @@ $(function () {
                 .attr('data-flow-index', index);
 
             flowContainer.append(
-                $('<div class="flow-title"></div>').text(value['title'])
+                $('<div class="flow-title"></div>').text(value['title']),
             );
             flowContainer.append(
-                $('<div class="flow-author"></div>').text(value['user'])
+                $('<div class="flow-author"></div>').text(value['user']),
             );
             flowContainer.append(
-                $('<div class="flow-description"></div>').text(value['description'])
+                $('<div class="flow-description"></div>').text(value['description']),
             );
             flowContainer.append(
                 $('<div class="flow-downloads"></div>')
                     .append($('<i class="fas fa-download"></i>')
                         .append($('<span class="number-container"></span>')
-                            .text(value['downloads'])
-                        )
-                    )
+                            .text(value['downloads']),
+                        ),
+                    ),
             );
             flowContainer.append(
                 $('<div class="flow-rating"></div>')
                     .append($('<i class="far fa-star"></i>')
                         .append($('<span class="number-container"></span>')
-                            .text(value['ratings'])
-                        )
-                    )
+                            .text(value['ratings']),
+                        ),
+                    ),
             );
 
             flowContainerList.append(flowContainer);
@@ -798,16 +798,16 @@ $(function () {
         $('#flow-data')
             .html('')
             .append(
-                $('<i class="fas fa-chevron-circle-left back-arrow" id="full-flow-data-back-arrow"></i>')
+                $('<i class="fas fa-chevron-circle-left back-arrow" id="full-flow-data-back-arrow"></i>'),
             )
             .append(
-                $('<div class="flow-title"></div>').text(flowData['title'])
+                $('<div class="flow-title"></div>').text(flowData['title']),
             )
             .append(
-                $('<div class="flow-author"></div>').text(flowData['user'])
+                $('<div class="flow-author"></div>').text(flowData['user']),
             )
             .append(
-                $('<div class="flow-description"></div>').text(flowData['description'])
+                $('<div class="flow-description"></div>').text(flowData['description']),
             )
             .append(
                 $('<div id="flow-data-bar" style="margin-bottom: 20px"></div>')
@@ -816,25 +816,25 @@ $(function () {
                             .append(
                                 $('<i class="fas fa-download"></i>')
                                     .append(
-                                        $('<span class="number-container"></span>').text(flowData['downloads'])
-                                    )
-                            )
+                                        $('<span class="number-container"></span>').text(flowData['downloads']),
+                                    ),
+                            ),
                     )
                     .append(
                         $('<div></div>')
                             .append(
                                 $('<i class="far fa-star"></i>')
                                     .append(
-                                        $('<span class="number-container"></span>').text(flowData['ratings'])
-                                    )
-                            )
+                                        $('<span class="number-container"></span>').text(flowData['ratings']),
+                                    ),
+                            ),
                     )
                     .append(
-                        $('<div id="download-button"><i class="fas fa-file-download"></i>  Download</div>')
+                        $('<div id="download-button"><i class="fas fa-file-download"></i>  Download</div>'),
                     )
                     .append(
-                        $('<div style="float: none" id="review-button"><i class="fas fa-user-plus"></i>  Add review</div>')
-                    )
+                        $('<div style="float: none" id="review-button"><i class="fas fa-user-plus"></i>  Add review</div>'),
+                    ),
             )
             .css('opacity', 1)
             .css('pointerEvents', 'all');
@@ -877,16 +877,16 @@ $(function () {
             error: (response) => {
                 if (response.status === 404) return;    // if no ratings
                 $('#flow-data').append(
-                    $(`<div class="rating-container">Error when getting flow reviews : <br>AJAX error code ${response.status}</div>`)
+                    $(`<div class="rating-container">Error when getting flow reviews : <br>AJAX error code ${response.status}</div>`),
                 );
-            }
+            },
 
         });
 
         // update url
 
         searchFilters['id'] = <string>flowID;
-        applyFilters(false)
+        applyFilters(false);
 
     }
 
@@ -947,13 +947,13 @@ $(function () {
 
         if (error)
             flowData.append(
-                $(`<div class="rating-container">JSON Parsing error<br>Response body:<br>${error}</div>`)
+                $(`<div class="rating-container">JSON Parsing error<br>Response body:<br>${error}</div>`),
             );
 
         if (body.css('pointerEvents') === 'none' && data.length > 0) {
 
             flowData.append(
-                $('<div style="position: relative; margin: 20px; font-size: 25px; font-weight: 600">Ratings</div>')
+                $('<div style="position: relative; margin: 20px; font-size: 25px; font-weight: 600">Ratings</div>'),
             );
 
             $.each(data, function (index, value) {
@@ -964,14 +964,14 @@ $(function () {
                             $('<div class="rating-title"></div>')
                                 .text(value['username'])
                                 .append(
-                                    (value['isedited'] === '1' ? ' <span style="opacity: .5; font-weight: lighter; margin-left: 10px">(edited)</span>' : '')
-                                )
+                                    (value['isedited'] === '1' ? ' <span style="opacity: .5; font-weight: lighter; margin-left: 10px">(edited)</span>' : ''),
+                                ),
                         )
                         .append(
                             $('<div class="rating-body"></div>')
-                                .text(value['comment'])
-                        )
-                )
+                                .text(value['comment']),
+                        ),
+                );
 
             });
 
@@ -996,10 +996,10 @@ $(function () {
             success: (data: string) => {
                 let element = document.createElement('a');
                 element.setAttribute('href',
-                    `data:application/octet-stream;charset=utf-8;base64,${data}`
+                    `data:application/octet-stream;charset=utf-8;base64,${data}`,
                 );
                 element.setAttribute('download',
-                    `${title}.flo`
+                    `${title}.flo`,
                 );
 
                 element.style.display = 'none';
@@ -1011,8 +1011,8 @@ $(function () {
             },
             error: () => {
                 alert('Download error');
-            }
-        })
+            },
+        });
     }
 
 });
