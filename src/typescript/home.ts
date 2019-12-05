@@ -700,6 +700,7 @@ $(function () {
             $('.flow-container:odd').css('backgroundColor', '#E5E5E5');
 
             triggerFlowContainerClick();
+            footerWindowResize();   // change the footer position
 
         });
 
@@ -983,14 +984,18 @@ $(function () {
 
     footerWindowResize();
 
+    /**
+     * Changes the footer position (absolute or relative) depending on the windows height and the lowest container
+     */
     function footerWindowResize() {
 
-        const footerDiv = $('footer');
-        //TODO: find the position of the lowest element
-        console.log(windowHeight - 200);
-        console.log(footerDiv.position().top);
+        const footerDiv = $('footer'), filterDiv = $('nav');
+        // determine the lowest container
+        const filterBottom: number = filterDiv.position().top + (filterDiv.height() || 200) + 100;
+        const flowContainerBottom: number = flowContainerList.position().top + (flowContainerList.height() || 0) + 100;
+        const bottomContainer: number = Math.max(filterBottom, flowContainerBottom);
 
-        if (windowHeight - 200 > footerDiv.position().top)
+        if (bottomContainer < windowHeight - 85)
             footerDiv.css({
                 position: 'absolute',
             });
