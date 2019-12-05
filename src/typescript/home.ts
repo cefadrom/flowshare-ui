@@ -164,14 +164,16 @@ $(function () {
     });
 
 
+    let isSearchBarExtended: boolean = false;
+
     /**
      * Extent or collapse the search bar in the header
      * @param showFull `true` : extend bar, `false` : collapse it
      */
     function searchBarResize(showFull: boolean) { // manage search bar on mobile (takes entire screen when focused)
 
-        if (!allowSearchBarResize) return;    // if can't be resized (screen is too big)
-        // lastSearchBarResize = Date.now();
+        if (!allowSearchBarResize || isSearchBarExtended === showFull) return;    // if can't be resized (screen is too big or already extended)
+        isSearchBarExtended = showFull;
 
         if (showFull) { // full search bar
 
@@ -187,7 +189,6 @@ $(function () {
                 const searchTxt = <HTMLInputElement>$('#search-txt')
                     .trigger('focus') // put focus on search field
                     .get(0);
-                console.log(searchTxt);
                 searchTxt.setSelectionRange(999999, 999999); // put cursor at the end of the text
             }, 100);
 
@@ -311,12 +312,10 @@ $(function () {
 
     // ----- GLOBAL SEARCH -----
 
-    $('#search-box').on('submit', () => {     // starts global search (submit form)
-        globalSearch(<string>$('#search-txt').val());
-    });
-
-    $('#search-btn').on('click', () => {     // starts global search (search button pressed)
-        globalSearch(<string>$('#search-txt').val());
+    $('#search-box').on('submit click', function (e) {     // starts global search
+        const parentElement = <HTMLElement>e.target.parentElement;
+        if ((e.target.id === 'search-btn' || parentElement.id === 'search-btn' || e.type !== 'click') && isSearchBarExtended)
+            globalSearch(<string>$('#search-txt').val());
     });
 
     function globalSearch(str: string) {
