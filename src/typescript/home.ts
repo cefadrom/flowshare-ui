@@ -146,7 +146,7 @@ $(function () {
     // -----------------------------------------------------------------------------------------------------
 
     let allowSearchBarResize = windowWidth < 750;
-    let resultContainer = $('#search-results');
+    const resultContainer = $('#search-results');
 
 
     /**
@@ -156,27 +156,26 @@ $(function () {
         allowSearchBarResize = windowWidth < 750;
     }
 
-    $('#search-box')
-        .on('mouseover', () => {
+    $('#search-box').on('mouseenter mouseleave', e => {
+        if (e.type === 'mouseenter')
             searchBarResize(true);
-        })
-        .on('mouseout', () => {
+        else
             searchBarResize(false);
-        });
+    });
 
 
     /**
      * Extent or collapse the search bar in the header
      * @param showFull `true` : extend bar, `false` : collapse it
-     * @param force ignore the `allowSearchBarResize` variable if true
      */
-    function searchBarResize(showFull: boolean, force?: boolean) { // manage search bar on mobile (takes entire screen when focused)
+    function searchBarResize(showFull: boolean) { // manage search bar on mobile (takes entire screen when focused)
 
-        if (!allowSearchBarResize && !force) return;    // if can't be resized (screen is too big)
+        if (!allowSearchBarResize) return;    // if can't be resized (screen is too big)
+        // lastSearchBarResize = Date.now();
 
         if (showFull) { // full search bar
 
-            $('#logo-big, #header-account').fadeOut(400);   // makes logo and account disappear
+            $('#logo-big, #header-account').fadeOut(200);   // makes logo and account disappear
             $('#search-box').css({  // expand global div
                 width: '280px',
                 right: 'calc((100% - 280px) / 2)',
@@ -185,15 +184,16 @@ $(function () {
             resultContainer.show(); // shows results
 
             setTimeout(() => {
-                let searchTxt = <HTMLInputElement>$('#search-txt')
+                const searchTxt = <HTMLInputElement>$('#search-txt')
                     .trigger('focus') // put focus on search field
                     .get(0);
+                console.log(searchTxt);
                 searchTxt.setSelectionRange(999999, 999999); // put cursor at the end of the text
             }, 100);
 
         } else {    // close search bar
 
-            $('#logo-big, #header-account').fadeIn(400);    // makes logo and account appear
+            $('#logo-big, #header-account').fadeIn(200);    // makes logo and account appear
             $('#search-box')
                 .css({  // collapse global div
                     width: 'auto',
