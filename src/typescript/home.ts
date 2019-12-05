@@ -109,7 +109,6 @@ $(function () {
                     setTimeout(toggleAccountPopup, 8000, false);
 
                     if (!Cookies.getJSON('account')['email']) Cookies.remove('account');
-
                 }
 
                 headerAccountUser.text(reqData['username']);
@@ -117,6 +116,7 @@ $(function () {
             },
             error: () => {
                 toggleAccountPopup(true, 'AJAX error', '#ff5b5f');
+                headerAccountUser.text('Account');
                 setTimeout(toggleAccountPopup, 8000, false);
             },
         });
