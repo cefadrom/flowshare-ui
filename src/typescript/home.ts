@@ -499,6 +499,7 @@ $(function () {
             $('nav').css('height', '310px');
             $('#nav-arrow').addClass('active');
         }
+        setTimeout(footerWindowResize, 400);  // manage the footer position
     }
 
     $('.filter').on('click', '.response', function () {
@@ -700,9 +701,10 @@ $(function () {
             $('.flow-container:odd').css('backgroundColor', '#E5E5E5');
 
             triggerFlowContainerClick();
-            footerWindowResize();   // change the footer position
 
         });
+
+        footerWindowResize();   // change the footer position
 
     }
 
@@ -995,6 +997,7 @@ $(function () {
         const flowContainerBottom: number = flowContainerList.position().top + (flowContainerList.height() || 0) + 100;
         const bottomContainer: number = Math.max(filterBottom, flowContainerBottom);
 
+        // set the footer position
         if (bottomContainer < windowHeight - 85)
             footerDiv.css({
                 position: 'absolute',
