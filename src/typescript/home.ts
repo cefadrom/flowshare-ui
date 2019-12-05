@@ -586,7 +586,7 @@ $(function () {
                     return;
                 let reqData = <Flow[]>decodeBrowserRequestData(data);
 
-                flowBrowserFlows = flowBrowserFlows.concat(reqData);
+                flowBrowserFlows = [...flowBrowserFlows, ...reqData];
                 displayFlowsList();
 
             },
@@ -612,8 +612,9 @@ $(function () {
                     return;
                 let reqData = <Flow[]>decodeBrowserRequestData(data);
 
-                flowBrowserFlows = flowBrowserFlows.concat(reqData);
-                displayFlowsList(`result(s)</span> for ${str}`, true, true);
+                flowBrowserFlows = [...flowBrowserFlows, ...reqData];
+                const resultCount: number = flowBrowserFlows.length;
+                displayFlowsList(`${resultCount} result${resultCount > 1 ? 's' : ''}</span> for ${str}`, true);
 
             },
             error: () => {
@@ -633,7 +634,7 @@ $(function () {
             return false;
         }
 
-        if (reqData.error) {
+        if (reqData.error && flowBrowserFlows.length === 0) {
             flowContainerList.prepend('<i class="fas fa-chevron-circle-left back-arrow" id="flow-search-back-arrow" style="top: 5px; left: 5px"></i>');
             flowSearchBackArrowPress();
             $('#flows-loading').html(`Error: ${reqData.error}`);
@@ -644,7 +645,7 @@ $(function () {
 
     }
 
-    function displayFlowsList(header?: string, showResultsCount?: boolean, showBackButton?: boolean) {
+    function displayFlowsList(header?: string, showBackButton?: boolean) {
 
         let data: Flow[] = flowBrowserFlows;
 
@@ -654,11 +655,10 @@ $(function () {
 
         if (header) {
 
-            let resultCount = showResultsCount ? `${data.length} ` : '';
             let backButton = showBackButton ? '<i class="fas fa-chevron-circle-left back-arrow" id="flow-search-back-arrow"></i>' : '';
 
             flowContainerList.append(
-                $(`<div class="header">${backButton}${resultCount}${header}</div><hr>`),
+                $(`<div class="header">${backButton}${header}</div><hr>`),
             );
 
             if (showBackButton) flowSearchBackArrowPress();
