@@ -373,9 +373,9 @@ footer {
   //display: table-row;
   //position: relative;
   position: absolute;
-  margin-bottom: -200px;
+  margin-bottom: -$footerHeight;
   bottom: 0;
   width: 100vw;
-  height: 200px;
+  height: $footerHeight;
   background-color: $theme-color;
 }
