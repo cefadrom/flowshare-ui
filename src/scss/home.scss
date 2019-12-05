@@ -343,7 +343,7 @@ nav {
   cursor: pointer;
   font-size: 18px;
 
-@media all and (max-width: 430px) {
+  @media all and (max-width: 430px) {
     font-size: 15px;
   }
 }
@@ -370,12 +370,26 @@ nav {
 // ---------- FOOTER ----------
 
 footer {
-  //display: table-row;
-  //position: relative;
   position: absolute;
   margin-bottom: -$footerHeight;
   bottom: 0;
   width: 100vw;
   height: $footerHeight;
   background-color: $theme-color;
+
+  div {
+    display: inline-block;
+    width: calc(50% - 2px);
+    text-align: center;
+    font-size: $footerHeight / 3;
+    line-height: $footerHeight;
+  }
+
+  @media all and (max-width: 500px) {
+    height: $footerHeight * 2;
+
+    div {
+      width: 100vw;
+    }
+  }
 }
