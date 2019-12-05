@@ -229,11 +229,11 @@ $(function () {
 
     // ----- INSTANT SEARCH -----
 
-    $('#search-txt').on('keyup focus', () => {    // trigger instant search
+    $('#search-txt').on('keyup focus', function () {// trigger instant search
 
-        let searchStr = <string>$(this).val();  // text entered in the search field
+        let searchStr = <string>$(this).val() || '';  // text entered in the search field
 
-        if (searchStr.match(/^[ ]*$/))  // if field is blank
+        if (searchStr.match(/^ *$/))  // if field is blank
             return resultContainer
                 .css('padding', '0')
                 .html('');
