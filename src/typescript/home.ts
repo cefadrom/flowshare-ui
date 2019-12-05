@@ -173,7 +173,6 @@ $(function () {
     function searchBarResize(showFull: boolean) { // manage search bar on mobile (takes entire screen when focused)
 
         if (!allowSearchBarResize || isSearchBarExtended === showFull) return;    // if can't be resized (screen is too big or already extended)
-        isSearchBarExtended = showFull;
 
         if (showFull) { // full search bar
 
@@ -186,6 +185,7 @@ $(function () {
             resultContainer.show(); // shows results
 
             setTimeout(() => {
+                isSearchBarExtended = true;
                 const searchTxt = <HTMLInputElement>$('#search-txt')
                     .trigger('focus') // put focus on search field
                     .get(0);
@@ -203,6 +203,7 @@ $(function () {
                 .trigger('blur');    // remove the focus
             $('#search-txt').css('width', '0');     // collapse search field
             resultContainer.hide(); // hide results
+            isSearchBarExtended = false;
 
         }
     }
