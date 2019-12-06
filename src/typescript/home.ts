@@ -145,7 +145,7 @@ $(function () {
     // ---------------------------------------- SEARCH BAR RESIZING ----------------------------------------
     // -----------------------------------------------------------------------------------------------------
 
-    let allowSearchBarResize = windowWidth < 750;
+    let allowSearchBarResize: boolean = windowWidth < 750;
     const resultContainer = $('#search-results');
 
 
@@ -319,7 +319,10 @@ $(function () {
 
     searchBoxDiv.on('submit click', function (e) {     // starts global search
         const parentElement = <HTMLElement>e.target.parentElement;
-        if ((e.target.id === 'search-btn' || parentElement.id === 'search-btn' || e.type !== 'click') && isSearchBarExtended)
+        if (
+            (e.target.id === 'search-btn' || parentElement.id === 'search-btn' || e.type !== 'click') // if the goof element or the good event is triggered
+            && (isSearchBarExtended  // if the search bar is not collapsed
+            || !allowSearchBarResize))   // if the search bar is too small so that the search bar can't be collapsed
             globalSearch(<string>$('#search-txt').val());
     });
 
