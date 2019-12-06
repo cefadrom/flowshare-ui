@@ -156,7 +156,9 @@ $(function () {
         allowSearchBarResize = windowWidth < 750;
     }
 
-    $('#search-box').on('mouseenter mouseleave', e => {
+    const searchBoxDiv = $('#search-box');
+
+    searchBoxDiv.on('mouseenter mouseleave', e => {
         if (e.type === 'mouseenter')
             searchBarResize(true);
         else
@@ -195,13 +197,13 @@ $(function () {
         } else {    // close search bar
 
             $('#logo-big, #header-account').fadeIn(200);    // makes logo and account appear
-            $('#search-box')
+            searchBoxDiv
                 .css({  // collapse global div
                     width: 'auto',
                     right: '120px',
                 })
                 .trigger('blur');    // remove the focus
-            $('#search-txt').css('width', '0');     // collapse search field
+            searchTxtInput.css('width', '0');     // collapse search field
             resultContainer.hide(); // hide results
             isSearchBarExtended = false;
 
@@ -215,7 +217,9 @@ $(function () {
 
     let searchResultData: any;   // array with result flows from search
 
-    $('#search-txt').on('blur', () => {   // remove instant search on text blur
+    const searchTxtInput = $('#search-txt');
+
+    searchTxtInput.on('blur', () => {   // remove instant search on text blur
         setTimeout(     // timeout because if it's disappear too fast the user can't click on the search results
             () => {
                 searchBarResize(false);
@@ -231,7 +235,7 @@ $(function () {
 
     // ----- INSTANT SEARCH -----
 
-    $('#search-txt').on('keyup focus', function () {// trigger instant search
+    searchTxtInput.on('keyup focus', function () {// trigger instant search
 
         let searchStr = <string>$(this).val() || '';  // text entered in the search field
 
@@ -313,7 +317,7 @@ $(function () {
 
     // ----- GLOBAL SEARCH -----
 
-    $('#search-box').on('submit click', function (e) {     // starts global search
+    searchBoxDiv.on('submit click', function (e) {     // starts global search
         const parentElement = <HTMLElement>e.target.parentElement;
         if ((e.target.id === 'search-btn' || parentElement.id === 'search-btn' || e.type !== 'click') && isSearchBarExtended)
             globalSearch(<string>$('#search-txt').val());
@@ -442,7 +446,7 @@ $(function () {
             });
 
         } else if (displayType === 'search') {
-            $('#search-txt').val(value);
+            searchTxtInput.val(value);
             result = true;
         }
 
@@ -586,7 +590,7 @@ $(function () {
                     return;
                 let reqData = <Flow[]>decodeBrowserRequestData(data);
 
-                flowBrowserFlows = [...flowBrowserFlows, ...reqData];
+                flowBrowserFlows = [ ...flowBrowserFlows, ...reqData ];
                 displayFlowsList();
 
             },
@@ -612,7 +616,7 @@ $(function () {
                     return;
                 let reqData = <Flow[]>decodeBrowserRequestData(data);
 
-                flowBrowserFlows = [...flowBrowserFlows, ...reqData];
+                flowBrowserFlows = [ ...flowBrowserFlows, ...reqData ];
                 const resultCount: number = flowBrowserFlows.length;
                 displayFlowsList(`${resultCount} result${resultCount > 1 ? 's' : ''}</span> for ${str}`, true);
 
