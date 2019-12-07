@@ -779,6 +779,7 @@ $(function () {
                     '<div id="download-button"><i class="fas fa-file-download" style="margin-right: 5px"></i>Download</div>',
                     '<div style="float: none" id="review-button"><i class="fas fa-user-plus" style="margin-right: 5px"></i>Add review</div>',
                 ),
+                //todo: add review field
             )
             .css('opacity', 1)
             .css('pointerEvents', 'all');
@@ -791,10 +792,7 @@ $(function () {
         });
         flowDataWindowResize();
 
-        // manage review button
-        $('#review-button').on('click', function (e) {
-
-        });
+        manageAddFlowReview(flowID);  // Manage review adding
 
         // manage flow list
 
@@ -836,6 +834,20 @@ $(function () {
 
         searchFilters['id'] = <string>flowID;
         applyFilters(false);
+
+    }
+
+    /**
+     * Manage all the actions related to the user review adding
+     * (show/hide panel, send the review)
+     * @param flowID The ID of the flow on the community
+     */
+    function manageAddFlowReview(flowID: string | number) {
+        let reviewDiv = $('#review-div');
+        // manage review button
+        $('#review-button').on('click', function (e) {
+
+        });
 
     }
 

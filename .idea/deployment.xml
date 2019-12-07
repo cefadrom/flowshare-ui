@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="Flowshare web">
+  <component name="PublishConfigData" serverName="Flowshare web" uploadOnCheckin="055ed98e-dc6f-472e-91a8-2a4e97402ca5">
     <serverData>
       <paths name="Flowshare web">
         <serverdata>
@@ -10,5 +10,6 @@
         </serverdata>
       </paths>
     </serverData>
+    <option name="myUploadOnCheckinName" value="Flowshare web" />
   </component>
 </project>
