@@ -147,6 +147,7 @@ $(function () {
 
     let allowSearchBarResize: boolean = windowWidth < 750;
     const resultContainer = $('#search-results');
+    const searchTxtInput = $('#search-txt');
 
 
     /**
@@ -179,11 +180,11 @@ $(function () {
         if (showFull) { // full search bar
 
             $('#logo-big, #header-account').fadeOut(200);   // makes logo and account disappear
-            $('#search-box').css({  // expand global div
+            searchBoxDiv.css({  // expand global div
                 width: '280px',
                 right: 'calc((100% - 280px) / 2)',
             });
-            $('#search-txt').css('width', '230px'); // expand search field
+            searchTxtInput.css('width', '230px'); // expand search field
             resultContainer.show(); // shows results
 
             setTimeout(() => {
@@ -216,8 +217,6 @@ $(function () {
     // -------------------------------------------------------------------------------------------------
 
     let searchResultData: any;   // array with result flows from search
-
-    const searchTxtInput = $('#search-txt');
 
     searchTxtInput.on('blur', () => {   // remove instant search on text blur
         setTimeout(     // timeout because if it's disappear too fast the user can't click on the search results
@@ -773,43 +772,24 @@ $(function () {
         $('#flow-data')
             .html('')
             .append(
-                $('<i class="fas fa-chevron-circle-left back-arrow" id="full-flow-data-back-arrow"></i>'),
-            )
-            .append(
+                '<i class="fas fa-chevron-circle-left back-arrow" id="full-flow-data-back-arrow"></i>',
                 $('<div class="flow-title"></div>').text(flowData['title']),
-            )
-            .append(
                 $('<div class="flow-author"></div>').text(flowData['user']),
-            )
-            .append(
                 $('<div class="flow-description"></div>').text(flowData['description']),
-            )
-            .append(
-                $('<div id="flow-data-bar" style="margin-bottom: 20px"></div>')
-                    .append(
-                        $('<div></div>')
-                            .append(
-                                $('<i class="fas fa-download"></i>')
-                                    .append(
-                                        $('<span class="number-container"></span>').text(flowData['downloads']),
-                                    ),
-                            ),
-                    )
-                    .append(
-                        $('<div></div>')
-                            .append(
-                                $('<i class="far fa-star"></i>')
-                                    .append(
-                                        $('<span class="number-container"></span>').text(flowData['ratings']),
-                                    ),
-                            ),
-                    )
-                    .append(
-                        $('<div id="download-button"><i class="fas fa-file-download"></i>  Download</div>'),
-                    )
-                    .append(
-                        $('<div style="float: none" id="review-button"><i class="fas fa-user-plus"></i>  Add review</div>'),
+                $('<div id="flow-data-bar" style="margin-bottom: 20px"></div>').append(
+                    $('<div></div>').append(
+                        $('<i class="fas fa-download"></i>').append(
+                            $('<span class="number-container"></span>').text(flowData['downloads']),
+                        ),
                     ),
+                    $('<div></div>').append(
+                        $('<i class="far fa-star"></i>').append(
+                            $('<span class="number-container"></span>').text(flowData['ratings']),
+                        ),
+                    ),
+                    '<div id="download-button"><i class="fas fa-file-download" style="margin-right: 5px"></i>Download</div>',
+                    '<div style="float: none" id="review-button"><i class="fas fa-user-plus" style="margin-right: 5px"></i>Add review</div>',
+                ),
             )
             .css('opacity', 1)
             .css('pointerEvents', 'all');
@@ -821,6 +801,11 @@ $(function () {
             downloadFlow(flowID, flowData['title']);
         });
         flowDataWindowResize();
+
+        // manage review button
+        $('#review-button').on('click', function (e) {
+
+        });
 
         // manage flow list
 
