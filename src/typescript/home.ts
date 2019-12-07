@@ -673,37 +673,27 @@ $(function () {
 
         $.each(data, function (index, value: any) {
 
-            let flowContainer = $('<div class="flow-container"></div>')
-                .attr('data-flow-id', value['id'])
-                .attr('data-flow-index', index);
-
-            flowContainer.append(
-                $('<div class="flow-title"></div>').text(value['title']),
-            );
-            flowContainer.append(
-                $('<div class="flow-author"></div>').text(value['user']),
-            );
-            flowContainer.append(
-                $('<div class="flow-description"></div>').text(value['description']),
-            );
-            flowContainer.append(
-                $('<div class="flow-downloads"></div>')
-                    .append($('<i class="fas fa-download"></i>')
-                        .append($('<span class="number-container"></span>')
-                            .text(value['downloads']),
+            flowContainerList.append(
+                $('<div class="flow-container"></div>').attr({
+                    'data-flow-id': value['id'],
+                    'data-flow-index': index,
+                }).append(
+                    $('<div class="flow-title"></div>').text(value['title']),
+                    $('<div class="flow-author"></div>').text(value['user']),
+                    $('<div class="flow-description"></div>').text(value['description']),
+                    $('<div class="flow-downloads"></div>')
+                        .append($('<i class="fas fa-download"></i>')
+                            .append($('<span class="number-container"></span>').text(value['downloads']),
+                            ),
                         ),
-                    ),
-            );
-            flowContainer.append(
-                $('<div class="flow-rating"></div>')
-                    .append($('<i class="far fa-star"></i>')
-                        .append($('<span class="number-container"></span>')
-                            .text(value['ratings']),
+                    $('<div class="flow-rating"></div>')
+                        .append($('<i class="far fa-star"></i>')
+                            .append($('<span class="number-container"></span>').text(value['ratings']),
+                            ),
                         ),
-                    ),
+                ),
             );
 
-            flowContainerList.append(flowContainer);
             $('.flow-container:odd').css('backgroundColor', '#E5E5E5');
 
             triggerFlowContainerClick();
