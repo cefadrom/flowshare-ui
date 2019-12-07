@@ -696,10 +696,9 @@ $(function () {
 
             $('.flow-container:odd').css('backgroundColor', '#E5E5E5');
 
-            triggerFlowContainerClick();
-
         });
 
+        triggerFlowContainerClick();    // starting click trigger
         footerWindowResize();   // change the footer position
 
     }
