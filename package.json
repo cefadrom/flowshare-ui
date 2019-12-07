@@ -8,7 +8,7 @@
     "build:javascript": "yarn build:typescript && yarn build:babel",
     "build:typescript": "tsc --emitDeclarationOnly",
     "build:babel": "babel src/typescript --out-dir dist/javascript --extensions \".ts,.tsx\" --source-maps true",
-    "build:scss": "sass src/scss:dist/css --style=compressed && postcss dist/css/*.css --replace --no-map --use autoprefixer"
+    "build:scss": "sass src/scss:dist/css --style=compressed && postcss dist/css/*.css --replace --no-map --use autoprefixer postcss-preset-env postcss-flexbugs-fixes"
   },
   "author": "cefadrom",
   "license": "ISC",
@@ -20,14 +20,15 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
     "@babel/preset-env": "^7.6.3",
     "@babel/preset-typescript": "^7.6.0",
-    "autoprefixer": "^9.7.0",
+    "autoprefixer": "^9.7.3",
     "babel-plugin-minify-mangle-names": "^0.5.0",
     "babel-preset-minify": "^0.5.1",
+    "postcss": "^7.0.24",
     "postcss-cli": "^6.1.3",
-    "typescript": "^3.6.4"
+    "postcss-flexbugs-fixes": "^4.1.0",
+    "postcss-preset-env": "^6.7.0"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.6.0",
     "@types/jquery": "^3.3.31",
     "@types/js-cookie": "^2.2.4",
     "js-cookie": "^2.2.1"

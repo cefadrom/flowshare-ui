@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="PROJECT" libraries="{all, jquery-3.4.1, js.cookie, url-search-params}" />
+    <file url="PROJECT" libraries="{all, js.cookie, url-search-params}" />
+    <includedPredefinedLibrary name="Node.js Core" />
   </component>
 </project>
