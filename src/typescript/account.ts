@@ -216,13 +216,7 @@ $(function () {
 
             let account: AccountCookie = Cookies.getJSON('account');
             let cookieExpires = account.expires === 0 ? undefined : { expires: account.expires };
-            let newCookie: AccountCookie = Object.assign(
-                account,
-                {
-                    email: data['email'],
-                    username: data['username'],
-                },
-            );
+            let newCookie: AccountCookie = { ...account, email: data['email'], username: data['username'] };
             Cookies.set('account', newCookie, cookieExpires);
 
             $('#content-account').clone().appendTo(contentDiv).show();
