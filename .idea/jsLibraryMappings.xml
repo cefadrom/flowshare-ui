@@ -2,8 +2,7 @@
 <project version="4">
   <component name="JavaScriptLibraryMappings">
     <file url="file://$PROJECT_DIR$/gulpfile.js" libraries="{Gulp}" />
-    <file url="PROJECT" libraries="{@types/jquery, all, jquery, js.cookie}" />
+    <file url="PROJECT" libraries="{all, flowshare-ui/node_modules, js.cookie}" />
     <includedPredefinedLibrary name="Node.js Core" />
-    <excludedPredefinedLibrary name="flowshare-ui/node_modules" />
   </component>
 </project>
