@@ -47,10 +47,14 @@ const imageCompression = {
 };
 // HTML
 const htmlmin = require('gulp-htmlmin');
+// Variables
+const srcFolder = 'src/';
+const distFolder = 'dist/';
+const devFolder = 'dev-live/';
 
 
 function compileTS() {
-    return src('src/typescript/*.ts')
+    return src(`${srcFolder}typescript/*.ts`)
         .pipe(sourcemaps.init())
         .pipe(tsProject())
         .pipe(clipEmptyFiles())
@@ -65,12 +69,12 @@ function compileTS() {
         }))
         .pipe(sourcemaps.write('../javascript'))
         .pipe(
-            dest('dist/javascript')
+            dest(`${distFolder}javascript`)
         );
 }
 
 function compileSCSS() {
-    return src('src/scss/*.scss')
+    return src(`${srcFolder}scss/*.scss`)
         .pipe(sourcemaps.init())
         .pipe(sass())
         .pipe(clipEmptyFiles())
@@ -79,17 +83,17 @@ function compileSCSS() {
             extname: '.min.css'
         }))
         .pipe(sourcemaps.write('../css'))
-        .pipe(dest('dist/css'));
+        .pipe(dest(`${distFolder}css`));
 }
 
 function minifyImages() {
-    return src(['src/img/**/*.png', 'src/img/**/*.jpg', 'src/img/**/*.jpeg', 'src/img/**/*.ico', 'src/img/**/*.svg'])
+    return src([`${srcFolder}img/**/*.png`, `'${srcFolder}img/**/*.jpg`, `${srcFolder}img/**/*.jpeg`, `${srcFolder}img/**/*.ico`, `${srcFolder}img/**/*.svg`])
         .pipe(image(imageCompression))
-        .pipe(dest('dist/img'));
+        .pipe(dest(`${distFolder}img`));
 }
 
 function minifyHTML() {
-    return src('src/pages/**/*.html')
+    return src(`${srcFolder}pages/**/*.html`)
         .pipe(htmlmin({
             collapseWhitespace: true,
             quoteCharacter: '"',
@@ -99,17 +103,17 @@ function minifyHTML() {
             removeAttributeQuotes: true,
             useShortDoctype: true
         }))
-        .pipe(dest('dist/'));
+        .pipe(dest(distFolder));
 }
 
 function cleanTask() {
-    return src('dist/**/', { read: false })
+    return src(`${distFolder}**/`, { read: false })
         .pipe(clean());
 }
 
 function copyRessources() {
-    return src(['src/res/**/*.*', 'src/res/**/.*'])
-        .pipe(dest('dist/'))
+    return src([`${srcFolder}res/**/*.*`, `${srcFolder}res/**/.*`])
+        .pipe(dest(distFolder));
 }
 
 // Production
