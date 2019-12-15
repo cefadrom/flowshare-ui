@@ -69,8 +69,6 @@ $(function () {
 
         filterWindowResize();
 
-        flowDataWindowResize();
-
         footerWindowResize();
 
     });
@@ -764,8 +762,7 @@ $(function () {
                 '<i class="fas fa-chevron-circle-left back-arrow" id="full-flow-data-back-arrow"></i>',
                 $('<div class="flow-title"></div>').text(flowData['title']),
                 $('<div class="flow-author"></div>').text(flowData['user']),
-                $('<div class="flow-description"></div>').text(flowData['description']),
-                $('<div id="flow-data-bar" style="margin-bottom: 20px"></div>').append(
+                $('<div id="flow-stats-bar"></div>').append(
                     $('<div></div>').append(
                         $('<i class="fas fa-download"></i>').append(
                             $('<span class="number-container"></span>').text(flowData['downloads']),
@@ -776,9 +773,12 @@ $(function () {
                             $('<span class="number-container"></span>').text(flowData['ratings']),
                         ),
                     ),
+                ),
+                $('<div class="flow-description"></div>').text(flowData['description']),
+                $('<div id="flow-buttons-bar"></div>').append(
                     '<div id="download-button"><i class="fas fa-file-download" style="margin-right: 5px"></i>Download</div>',
                     '<div style="float: none" id="review-button"><i class="fas fa-user-plus" style="margin-right: 5px"></i>Add review</div>',
-                ),
+                    )
                 //todo: add review field
             )
             .css('opacity', 1)
@@ -790,7 +790,6 @@ $(function () {
         $('#download-button').off('click.flowshare').on('click.flowshare', () => {
             downloadFlow(flowID, flowData['title']);
         });
-        flowDataWindowResize();
 
         manageAddFlowReview(flowID);  // Manage review adding
 
@@ -871,23 +870,6 @@ $(function () {
                 delete searchFilters.id;
                 applyFilters(false);
             });
-
-    }
-
-
-    /**
-     * Function triggered when the window width changes on the full flow data display, in order to fix a margin bug for the review button
-     */
-    function flowDataWindowResize() {
-
-        // fix margin bug with review button
-        let reviewButton = $('#review-button');
-
-        if (windowWidth < 900 || (windowWidth > 1000 && windowWidth < 1350))
-            reviewButton.css('left', '6%');
-        else
-            reviewButton.css('left', '0');
-
 
     }
 
