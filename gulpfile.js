@@ -75,6 +75,9 @@ const out = {
 };
 
 
+// ------------------- PRODUCTION --------------------
+
+
 function prodCompileTS() {
     return src(sources.typescript)
         .pipe(sourcemaps.init())
@@ -90,31 +93,14 @@ function prodCompileTS() {
             extname: '.min.js'
         }))
         .pipe(sourcemaps.write('../javascript'))
-        .pipe(
-            dest(folders.dist + out.javascript)
-        );
-}
-
-
-function devCompileTS() {
-    return src(sources.typescript)
-        .pipe(sourcemaps.init())
-        .pipe(tsProject())
-        .pipe(clipEmptyFiles())
-        .pipe(babel({
-            presets: ['@babel/env']
-        }))
-        .pipe(sourcemaps.write('../javascript'))
-        .pipe(
-            dest(folders.dev + out.javascript)
-        );
+        .pipe(dest(folders.dist + out.javascript));
 }
 
 
 function prodCompileSCSS() {
     return src(sources.scss)
         .pipe(sourcemaps.init())
-        .pipe(sass())
+        .pipe(sass().on('error', sass.logError))
         .pipe(clipEmptyFiles())
         .pipe(postcss([...cssPlugins.base, ...cssPlugins.prod]))
         .pipe(rename({
@@ -147,36 +133,99 @@ function minifyHTML() {
 }
 
 
-function cleanTask() {
+function prodCopyRes() {
+    return src(sources.ressources)
+        .pipe(dest(folders.dist + out.ressources));
+}
+
+
+function distClean() {
     return src(`${folders.dist}/**/`, { read: false })
         .pipe(clean());
 }
 
 
-function copyRessources() {
-    return src(sources.ressources)
-        .pipe(dest(folders.dist + out.ressources));
+// -------------------- DEVLOPMENT --------------------
+
+
+function devCompileTS() {
+    return src(sources.typescript)
+        .pipe(sourcemaps.init())
+        .pipe(tsProject())
+        .pipe(clipEmptyFiles())
+        .pipe(babel({
+            presets: ['@babel/env']
+        }))
+        .pipe(rename({
+            extname: '.min.js'
+        }))
+        .pipe(sourcemaps.write('../javascript'))
+        .pipe(dest(folders.dev + out.javascript));
+}
+
+
+function devCompileSCSS() {
+    return src(sources.scss)
+        .pipe(sourcemaps.init())
+        .pipe(sass().on('error', sass.logError))
+        .pipe(clipEmptyFiles())
+        .pipe(postcss(cssPlugins.base))
+        .pipe(rename({
+            extname: '.min.css'
+        }))
+        .pipe(sourcemaps.write('../css'))
+        .pipe(dest(folders.dev + out.css))
+        .pipe(browserSync.stream());
+}
+
+
+function devClean() {
+    return src(`${folders.dev}/**/`, { read: false })
+        .pipe(clean());
+}
+
+
+function devCopyHTML() {
+    return src(sources.html)
+        .pipe(dest(folders.dev + out.html));
 }
 
 
 function devWatch() {
     browserSync.init({
         server: {
-            baseDir: folders.dev
-        }
+            baseDir: folders.dev,
+            middleware: function (req, res, next) {
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                next();
+            }
+        },
+        notify: false,
+        startPath: 'home/',
+        port: 80,
+        cors: true
     });
-    watch();
+    watch(sources.scss, devCompileSCSS);
+    watch(sources.typescript).on('change', series(devCompileTS, browserSync.reload));
+    watch(sources.html).on('change', series(devCopyHTML, browserSync.reload));
 }
 
 
 // Production
-exports.compile_TS = prodCompileTS;
-exports.compile_SCSS = prodCompileSCSS;
+exports.prod_compile_TS = prodCompileTS;
+exports.prod_compile_SCSS = prodCompileSCSS;
 exports.minify_HTML = minifyHTML;
 exports.minify_Images = minifyImages;
-exports.copyRessources = copyRessources;
-exports.build = series(
-    cleanTask,
-    parallel(prodCompileTS, prodCompileSCSS, minifyImages, minifyHTML, copyRessources)
+exports.prod_copyRessources = prodCopyRes;
+exports.prod_build = series(
+    distClean,
+    parallel(prodCompileTS, prodCompileSCSS, minifyImages, minifyHTML, prodCopyRes)
 );
-exports.clean = cleanTask;
+exports.dist_clean = distClean;
+
+// Devlopment
+exports.dev_watch = series(
+    devClean,
+    parallel(devCompileTS, devCompileSCSS, devCopyHTML),
+    devWatch
+);
