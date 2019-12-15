@@ -191,6 +191,18 @@ function devCopyHTML() {
 }
 
 
+function devCopyImages() {
+    return src(sources.images)
+        .pipe(dest(folders.dev + out.images));
+}
+
+
+function devCopyRes() {
+    return src(sources.ressources)
+        .pipe(dest(folders.dev + out.ressources));
+}
+
+
 function devWatch() {
     browserSync.init({
         server: {
@@ -208,6 +220,8 @@ function devWatch() {
     watch(sources.scss, devCompileSCSS);
     watch(sources.typescript).on('change', series(devCompileTS, browserSync.reload));
     watch(sources.html).on('change', series(devCopyHTML, browserSync.reload));
+    watch(sources.images).on('change', series(devCopyImages, browserSync.reload));
+    watch(sources.ressources).on('change', series(devCopyRes, browserSync.reload));
 }
 
 
@@ -226,6 +240,6 @@ exports.dist_clean = distClean;
 // Devlopment
 exports.dev_watch = series(
     devClean,
-    parallel(devCompileTS, devCompileSCSS, devCopyHTML),
+    parallel(devCompileTS, devCompileSCSS, devCopyHTML, devCopyImages, devCopyRes),
     devWatch
 );
