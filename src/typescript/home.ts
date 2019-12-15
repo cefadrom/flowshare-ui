@@ -778,7 +778,7 @@ $(function () {
                 $('<div id="flow-buttons-bar"></div>').append(
                     '<div id="download-button"><i class="fas fa-file-download" style="margin-right: 5px"></i>Download</div>',
                     '<div style="float: none" id="review-button"><i class="fas fa-user-plus" style="margin-right: 5px"></i>Add review</div>',
-                    )
+                ),
                 //todo: add review field
             )
             .css('opacity', 1)
@@ -796,7 +796,7 @@ $(function () {
         // manage flow list
 
         flowContainerList.css('opacity', 0);
-        if (windowWidth < 1000) $('nav').css('opacity', 0);
+        $('nav').css('opacity', 0);
         body.css('pointerEvents', 'none');
         $('header').css('pointerEvents', 'all');
 
