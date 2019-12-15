@@ -205,11 +205,11 @@ nav {
 
 #flow-data {
   position: fixed;
-  top: calc(50% + 40px);
+  top: calc(50% + 45px);
   left: 50%;
   transform: translate(-50%, -50%);
   width: 90vw;
-  max-height: calc(100vh - 120px);
+  max-height: calc(100vh - 85px);
   overflow: hidden auto;
   background-color: $bg-dark;
   box-shadow: 0 0 1px 1px #97a3a5;
@@ -336,12 +336,20 @@ nav {
     width: 140px;
     text-align: center;
     margin-bottom: 10px;
+    transition: .4s;
+
+    &:hover {
+      background: $theme-color;
+    }
 
     @media all and (max-width: 430px) {
       font-size: 15px;
     }
   }
+}
 
+#review-button.enabled {
+  background-color: $theme-color;
 }
 
 
@@ -362,6 +370,58 @@ nav {
     position: relative;
     font-size: 20px;
   }
+}
+
+
+#rating-add-form {
+  height: 0;
+  overflow: hidden;
+  transition: .4s;
+
+  &.enabled {
+    height: 500px;
+  }
+
+  #rating-add-title {
+    display: block;
+    width: 100%;
+    padding-left: 5%;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  textarea {
+    width: calc(90% - 10px);
+    min-width: calc(90% - 10px);
+    max-width: calc(90% - 10px);
+    height: 300px;
+    min-height: 300px;
+    max-height: 300px;
+    margin: 10px 5%;
+    padding: 5px;
+    font-family: 'Barlow', sans-serif;
+    border: 1px solid $theme-color;
+    border-radius: 10px;
+    background-color: transparent;
+    resize: none;
+  }
+
+  input {
+    display: block;
+    font-size: 18px;
+    padding: 10px 15px;
+    margin: 10px auto;
+    background: transparent;
+    border: 1px solid $theme-color;
+    border-radius: 20px;
+    transition: .3s;
+    cursor: pointer;
+
+    &:hover {
+      background: $theme-color;
+    }
+  }
+
 }
 
 // ---------- FOOTER ----------

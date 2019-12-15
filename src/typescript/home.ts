@@ -779,6 +779,12 @@ $(function () {
                     '<div id="download-button"><i class="fas fa-file-download" style="margin-right: 5px"></i>Download</div>',
                     '<div style="float: none" id="review-button"><i class="fas fa-user-plus" style="margin-right: 5px"></i>Add review</div>',
                 ),
+                $('<form id="rating-add-form"></form>').append(
+                    '<div id="rating-add-title">Add a review</div>',
+                    '<textarea></textarea>',
+                    '<input type="submit" value="Post comment">',
+                    '<input type="reset" value="Cancel" id="rating-add-cancel">',
+                ),
                 //todo: add review field
             )
             .css('opacity', 1)
@@ -845,7 +851,10 @@ $(function () {
         let reviewDiv = $('#review-div');
         // manage review button
         $('#review-button').on('click', function (e) {
-
+            $('#rating-add-form, #review-button').addClass('enabled');
+        });
+        $('#rating-add-cancel').on('click', function (e) {
+            $('#rating-add-form, #review-button').removeClass('enabled');
         });
 
     }
