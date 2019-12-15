@@ -373,13 +373,33 @@ nav {
 }
 
 
-#rating-add-form {
+#review-add-form {
   height: 0;
   overflow: hidden;
   transition: .4s;
 
+  .blur {
+    position: absolute;
+    height: 0;
+    width: 100%;
+    background-color: black;
+    opacity: 0;
+    pointer-events: none;
+    transition: .3s;
+  }
+
   &.enabled {
     height: 500px;
+    .blur {
+      height: 500px;
+    }
+  }
+
+  &.query {
+    .blur {
+      opacity: .5;
+      pointer-events: all;
+    }
   }
 
   #rating-add-title {
@@ -394,9 +414,9 @@ nav {
     width: calc(90% - 10px);
     min-width: calc(90% - 10px);
     max-width: calc(90% - 10px);
-    height: 300px;
-    min-height: 300px;
-    max-height: 300px;
+    height: 330px;
+    min-height: 330px;
+    max-height: 330px;
     margin: 10px 5%;
     padding: 5px;
     font-family: 'Barlow', sans-serif;

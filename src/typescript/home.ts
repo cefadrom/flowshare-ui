@@ -78,7 +78,7 @@ $(function () {
     // ---------------------------------------- CHECKING ACCOUNT ----------------------------------------
     // --------------------------------------------------------------------------------------------------
 
-    let account: AccountCookie = Cookies.getJSON('account'),
+    let account: AccountCookie | null = Cookies.getJSON('account'),
         accountPopup = $('#header-account-popup'),
         headerAccountUser = $('#header-account-user');
 
@@ -102,6 +102,7 @@ $(function () {
                 }
 
                 if (reqData['error']) {
+                    account = null;
                     headerAccountUser.text('Account');
                     toggleAccountPopup(true, reqData['error'], '#ff5b5f');
                     setTimeout(toggleAccountPopup, 8000, false);
@@ -119,6 +120,8 @@ $(function () {
             },
         });
 
+    } else {
+        account = null;
     }
 
     accountPopup.on('click.flowshare', () => {
@@ -756,6 +759,8 @@ $(function () {
      */
     function displayFullFlowData(flowData: Flow, flowID: string) {
 
+        //TODO: pre-fill textarea with the actual comment if it exists
+
         $('#flow-data')
             .html('')
             .append(
@@ -777,15 +782,15 @@ $(function () {
                 $('<div class="flow-description"></div>').text(flowData['description']),
                 $('<div id="flow-buttons-bar"></div>').append(
                     '<div id="download-button"><i class="fas fa-file-download" style="margin-right: 5px"></i>Download</div>',
-                    '<div style="float: none" id="review-button"><i class="fas fa-user-plus" style="margin-right: 5px"></i>Add review</div>',
+                    '<div id="review-button" style="float: none"><i class="fas fa-user-plus" style="margin-right: 5px"></i>Add review</div>',
                 ),
-                $('<form id="rating-add-form"></form>').append(
+                $('<form id="review-add-form" onsubmit="return false"></form>').append(
+                    '<div class="blur"></div>',
                     '<div id="rating-add-title">Add a review</div>',
                     '<textarea></textarea>',
-                    '<input type="submit" value="Post comment">',
-                    '<input type="reset" value="Cancel" id="rating-add-cancel">',
+                    '<input id="review-add-submit" type="button" value="Post comment">',
+                    '<input id="review-add-cancel" type="reset" value="Cancel">',
                 ),
-                //todo: add review field
             )
             .css('opacity', 1)
             .css('pointerEvents', 'all');
@@ -842,19 +847,74 @@ $(function () {
 
     }
 
+
     /**
      * Manage all the actions related to the user review adding
      * (show/hide panel, send the review)
      * @param flowID The ID of the flow on the community
      */
     function manageAddFlowReview(flowID: string | number) {
-        let reviewDiv = $('#review-div');
-        // manage review button
-        $('#review-button').on('click', function (e) {
-            $('#rating-add-form, #review-button').addClass('enabled');
+        //TODO: prevent disconnected people to add a review
+        const reviewForm = $('#review-add-form');
+        // manage review button and area
+        $('#review-button').on('click', function () {
+            $('#review-add-form, #review-button').addClass('enabled');
         });
-        $('#rating-add-cancel').on('click', function (e) {
-            $('#rating-add-form, #review-button').removeClass('enabled');
+        $('#review-add-cancel').on('click', function () {
+            $('#review-add-form, #review-button').removeClass('enabled');
+        });
+        // manage review adding
+        $('#review-add-submit').on('click', function () {
+            const reviewContent = <string>$('#review-add-form textarea').val();
+            console.log(reviewContent);
+            if (reviewContent.length === 0) return;
+            console.log(reviewForm);
+            reviewForm.addClass('query');
+            sendFlowReview(flowID, reviewContent);
+        });
+    }
+
+    /**
+     * Send a flow review to the server
+     * @param flowID {string | number} The ID of the flow to review
+     * @param review {string} The text of the review
+     */
+    function sendFlowReview(flowID: string | number, review: string) {
+        const reviewForm = $('#review-add-form');
+        $.ajax({
+            type: 'POST',
+            url: `${flowshareURLs.api}reviews.php`,
+            data: {
+                add: '',
+                id: flowID,
+                comment: review,
+                token: (<AccountCookie>account).token,
+            },
+            timeout: 5000,
+            success: (data: string) => {
+
+                //TODO: better display
+                let requestData: { response: string, error: string };
+                try {
+                    requestData = JSON.parse(data);
+                } catch (e) {
+                    return alert(`JSON Parse error: ${e}\nRequest result: ${data}`);
+                }
+
+                reviewForm.removeClass('query');
+
+                if (requestData.error)
+                    alert(requestData.error);
+                else
+                    alert(requestData.response);
+
+                //TODO: update comments on positive response
+
+            },
+            error: () => {
+                reviewForm.removeClass('query');
+                alert('Error when getting flows list: AJAX error<br>Please reload page or contact the site administrator.');
+            },
         });
 
     }
