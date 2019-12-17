@@ -148,7 +148,8 @@ $(function () {
 
     let allowSearchBarResize: boolean = windowWidth < 750;
     const resultContainer = $('#search-results');
-    const searchTxtInput = $('#search-txt');
+    const searchTxtElement = $('#search-txt');
+    const searchTxtInput = <HTMLInputElement>searchTxtElement.get(0);
 
 
     /**
@@ -185,15 +186,13 @@ $(function () {
                 width: '280px',
                 right: 'calc((100% - 280px) / 2)',
             });
-            searchTxtInput.css('width', '230px'); // expand search field
+            searchTxtElement.css('width', '230px'); // expand search field
             resultContainer.show(); // shows results
 
             setTimeout(() => {
                 isSearchBarExtended = true;
-                const searchTxt = <HTMLInputElement>$('#search-txt')
-                    .trigger('focus') // put focus on search field
-                    .get(0);
-                searchTxt.setSelectionRange(999999, 999999); // put cursor at the end of the text
+                searchTxtElement.trigger('focus'); // put focus on search field
+                searchTxtInput.setSelectionRange(999999, 999999); // put cursor at the end of the text
             }, 100);
 
         } else {    // close search bar
@@ -205,7 +204,7 @@ $(function () {
                     right: '120px',
                 })
                 .trigger('blur');    // remove the focus
-            searchTxtInput.css('width', '0');     // collapse search field
+            searchTxtElement.css('width', '0');     // collapse search field
             resultContainer.hide(); // hide results
             isSearchBarExtended = false;
 
@@ -219,7 +218,7 @@ $(function () {
 
     let searchResultData: any;   // array with result flows from search
 
-    searchTxtInput.on('blur', () => {   // remove instant search on text blur
+    searchTxtElement.on('blur', () => {   // remove instant search on text blur
         setTimeout(     // timeout because if it's disappear too fast the user can't click on the search results
             () => {
                 searchBarResize(false);
@@ -235,7 +234,7 @@ $(function () {
 
     // ----- INSTANT SEARCH -----
 
-    searchTxtInput.on('keyup focus', function () {// trigger instant search
+    searchTxtElement.on('keyup focus', function () {// trigger instant search
 
         let searchStr = <string>$(this).val() || '';  // text entered in the search field
 
@@ -284,7 +283,7 @@ $(function () {
         // Format result
         function displayResult(flowsData: Flow[] | null, error?: string | undefined) {
 
-            if ($('#search-txt').val() !== str) return;
+            if (searchTxtElement.val() !== str) return;
 
             resultContainer
                 .css('padding', '8px')
@@ -323,7 +322,7 @@ $(function () {
             (e.target.id === 'search-btn' || parentElement.id === 'search-btn' || e.type !== 'click') // if the goof element or the good event is triggered
             && (isSearchBarExtended  // if the search bar is not collapsed
             || !allowSearchBarResize))   // if the search bar is too small so that the search bar can't be collapsed
-            globalSearch(<string>$('#search-txt').val());
+            globalSearch(<string>searchTxtElement.val());
     });
 
     function globalSearch(str: string) {
@@ -449,7 +448,7 @@ $(function () {
             });
 
         } else if (displayType === 'search') {
-            searchTxtInput.val(value);
+            searchTxtElement.val(value);
             result = true;
         }
 

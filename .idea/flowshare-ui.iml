@@ -7,7 +7,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="all" level="application" />
-    <orderEntry type="library" name="jquery-3.4.1" level="application" />
     <orderEntry type="library" name="js.cookie" level="application" />
     <orderEntry type="library" name="Gulp" level="application" />
   </component>
