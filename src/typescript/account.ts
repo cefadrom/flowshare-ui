@@ -47,6 +47,58 @@ $(function () {
         api: 'https://rasphost.com/flowshare/',
     };
 
+    const contentLogin = $('#content-login');
+    const loginMail = $('#login-mail');
+
+    // ----- TEMPLATE MANAGER -----
+
+    const templates = {
+        daily: {
+            element: $('#content-daily-template'),
+            id: 'content-daily',
+        },
+        login: {
+            element: $('#content-login-template'),
+            id: 'content-login',
+        },
+        loginToken: {
+            element: $('#content-login-token-template'),
+            id: 'content-login-token',
+        },
+        register: {
+            element: $('#content-register-template'),
+            id: 'content-register',
+        },
+        account: {
+            element: $('#content-account-template'),
+            id: 'content-account',
+        },
+        upload: {
+            element: $('#content-upload-template'),
+            id: 'content-upload',
+        },
+    };
+
+    /**
+     * Append a container from templates to a div
+     * @param templateName The template name
+     * @param previousDiv The div to append the container
+     * @param callback The callback function when the element is displayed
+     */
+    function setTemplate(
+        templateName: 'daily' | 'login' | 'loginToken' | 'register' | 'account' | 'upload',
+        previousDiv: JQuery,
+        callback?: (id: string, newElement: JQuery) => void,
+    ) {
+        const { element, id } = templates[templateName];
+        const newElement = element
+            .clone()
+            .attr('id', id)
+            .appendTo(previousDiv)
+            .show();
+        if (callback) callback(id, newElement);
+    }
+
 
     // --------------------------------------------------------------------------------------------
     // ---------------------------------------- CATEGORIES ----------------------------------------
@@ -206,12 +258,15 @@ $(function () {
             let newCookie: AccountCookie = { ...account, email: data['email'], username: data['username'] };
             Cookies.set('account', newCookie, cookieExpires);
 
-            $('#content-account').clone().appendTo(contentDiv).show();
-            $('#content-account .title:first').html(`Connected as ${data['username']}<br>${data['coins']} sharecoins`);
+            setTemplate('account', contentDiv, (id) => {
 
-            $('#account-logout').on('click.flowshare', function () {
-                Cookies.remove('account');
-                displayLoginForm(null, data['email']);
+                $(`#${id} #content-account .title:first`).html(`Connected as ${data['username']}<br>${data['coins']} sharecoins`);
+
+                $(`#${id} #account-logout`).on('click.flowshare', function () {
+                    Cookies.remove('account');
+                    displayLoginForm(null, data['email']);
+                });
+
             });
 
         }
@@ -219,9 +274,6 @@ $(function () {
     }
 
     // ----- LOGIN -----
-
-    const contentLogin = $('#content-login');
-    const loginMail = $('#login-mail');
 
     /**
      * Display the login form
@@ -238,93 +290,95 @@ $(function () {
         });
 
         allowChoseCategory = false;
-        contentLogin.clone().appendTo(contentDiv).show();
+        setTemplate('login', contentDiv, ((id, newElement) => {
 
-        let mask = $('#content-login .mask:first');
-        loginMail.trigger('focus');
-
-        if (error) displayError(error);
-
-        if (!email && Cookies.getJSON('account')) email = Cookies.getJSON('account')['email'];
-
-        if (email) {
-            loginMail.val(email);
-            $('#login-password').trigger('focus');
-        } else {
+            let mask = $('#content-login .mask:first');
             loginMail.trigger('focus');
-        }
 
-        contentLogin.on('submit', function () {
+            if (error) displayError(error);
 
-            mask.fadeIn();
+            if (!email && Cookies.getJSON('account')) email = Cookies.getJSON('account')['email'];
 
-            $.ajax({
-                method: 'POST',
-                url: `${flowshareURLs.api}login.php`,
-                data: {
-                    email: loginMail.val(),
-                    password: $('#login-password').val(),
-                },
-                success: (data: string) => {
-                    loginResult(data);
-                },
-                error: (e) => {
-                    mask.fadeOut();
-                    displayError(`AJAX error: response status ${e.status}. Please try later or contact the administrator`);
-                },
-            });
-
-        });
-
-        $('#content-login .additional-button').on('click.flowshare', function () {
-
-            if ($(this).attr('data-ref') === 'token')
-                displayTokenLoginForm();
-            else
-                displayRegisterForm();
-
-        });
-
-        function loginResult(data: string) {
-
-            mask.fadeOut();
-
-            let reqData: LoginRequest;
-            try {
-                reqData = JSON.parse(data);
-            } catch (e) {
-                return displayError(`Error: ${e}, response body: ${data}`);
+            if (email) {
+                loginMail.val(email);
+                $('#login-password').trigger('focus');
+            } else {
+                loginMail.trigger('focus');
             }
 
-            if (reqData['error']) return displayError(reqData['error']);
+            newElement.on('submit', function () {
 
-            if (reqData['response'] !== 'OK') return displayError(`An error occurs, response body: ${JSON.stringify(data)}`);
+                mask.fadeIn();
 
-            let args: { expires: number } | undefined;
-            if ($('#content-login #login-remember:checked').length) // if the user checked the "remember me" option
-                args = { expires: 365 };
+                $.ajax({
+                    method: 'POST',
+                    url: `${flowshareURLs.api}login.php`,
+                    data: {
+                        email: loginMail.val(),
+                        password: $('#login-password').val(),
+                    },
+                    success: (data: string) => {
+                        loginResult(data);
+                    },
+                    error: (e) => {
+                        mask.fadeOut();
+                        displayError(`AJAX error: response status ${e.status}. Please try later or contact the administrator`);
+                    },
+                });
 
-            Cookies.set('account', {
-                token: reqData['token'],
-                expires: args ? 365 : 0,
-            }, args);
+            });
 
-            displayAccountData();
+            $('#content-login .additional-button').on('click.flowshare', function () {
 
-        }
+                if ($(this).attr('data-ref') === 'token')
+                    displayTokenLoginForm();
+                else
+                    displayRegisterForm();
 
-        function displayError(msg: string) {
-            $('.error-msg:first').text(msg);
-            loginMail.trigger('focus');
-            return $('#login-password').val('');
-        }
+            });
+
+            function loginResult(data: string) {
+
+                mask.fadeOut();
+
+                let reqData: LoginRequest;
+                try {
+                    reqData = JSON.parse(data);
+                } catch (e) {
+                    return displayError(`Error: ${e}, response body: ${data}`);
+                }
+
+                if (reqData['error']) return displayError(reqData['error']);
+
+                if (reqData['response'] !== 'OK') return displayError(`An error occurs, response body: ${JSON.stringify(data)}`);
+
+                let args: { expires: number } | undefined;
+                if ($('#content-login #login-remember:checked').length) // if the user checked the "remember me" option
+                    args = { expires: 365 };
+
+                Cookies.set('account', {
+                    token: reqData['token'],
+                    expires: args ? 365 : 0,
+                }, args);
+
+                displayAccountData();
+
+            }
+
+            //TODO: fix template system triggers
+
+            function displayError(msg: string) {
+                $('.error-msg:first').text(msg);
+                loginMail.trigger('focus');
+                return $('#login-password').val('');
+            }
+
+        }));
 
     }
 
-    // ----- LOGIN WITH TOKEN -----
 
-    const contentLoginToken = $('#content-login-token');
-    const loginToken = $('#login-token');
+    // ----- LOGIN WITH TOKEN -----
 
     /**
      * Displays the login form in the `#content` div and makes the ajax request when submitted
@@ -339,7 +393,10 @@ $(function () {
         });
 
         allowChoseCategory = false;
-        contentLoginToken.clone().appendTo(contentDiv).show();
+        setTemplate('loginToken', contentDiv);
+
+        const contentLoginToken = $('#content-login-token');
+        const loginToken = $('#login-token');
 
         loginToken.trigger('focus');
         let mask = $('#content-login-token .mask');
@@ -424,7 +481,7 @@ $(function () {
         });
 
         allowChoseCategory = false;
-        contentRegister.clone().appendTo(contentDiv).show();
+        setTemplate('register', contentDiv);
 
         registerEmail.trigger('focus');
         // let mask = $('#content-register .mask');
