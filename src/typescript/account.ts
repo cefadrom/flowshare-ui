@@ -54,7 +54,8 @@ $(function () {
 
     let allowChoseCategory: boolean = true;
 
-    let categoryDiv = $('.category');
+    const contentDiv = $('#content');
+    const categoryDiv = $('.category');
 
     $('.category:first').css('backgroundColor', '#fdcb6e');
 
@@ -82,7 +83,7 @@ $(function () {
      */
     function setCategory(name: string) {
 
-        $('#content').html('');
+        contentDiv.html('');
         $(name).clone().css('display', 'block').appendTo('#content');
 
         if (name === '#content-account') {
@@ -143,8 +144,6 @@ $(function () {
     // ----------------------------------------------------------------------------------------------
     // ---------------------------------------- ACCOUNT PART ----------------------------------------
     // ----------------------------------------------------------------------------------------------
-
-    let contentDiv = $('#content');
 
     contentDiv.html('');
 
@@ -221,6 +220,9 @@ $(function () {
 
     // ----- LOGIN -----
 
+    const contentLogin = $('#content-login');
+    const loginMail = $('#login-mail');
+
     /**
      * Display the login form
      * @param error displays the error if there is one
@@ -236,23 +238,23 @@ $(function () {
         });
 
         allowChoseCategory = false;
-        $('#content-login').clone().appendTo(contentDiv).show();
+        contentLogin.clone().appendTo(contentDiv).show();
 
         let mask = $('#content-login .mask:first');
-        $('#login-mail').trigger('focus');
+        loginMail.trigger('focus');
 
         if (error) displayError(error);
 
         if (!email && Cookies.getJSON('account')) email = Cookies.getJSON('account')['email'];
 
         if (email) {
-            $('#login-mail').val(email);
+            loginMail.val(email);
             $('#login-password').trigger('focus');
         } else {
-            $('#login-mail').trigger('focus');
+            loginMail.trigger('focus');
         }
 
-        $('#content-login').on('submit', function () {
+        contentLogin.on('submit', function () {
 
             mask.fadeIn();
 
@@ -260,7 +262,7 @@ $(function () {
                 method: 'POST',
                 url: `${flowshareURLs.api}login.php`,
                 data: {
-                    email: $('#login-mail').val(),
+                    email: loginMail.val(),
                     password: $('#login-password').val(),
                 },
                 success: (data: string) => {
@@ -313,13 +315,16 @@ $(function () {
 
         function displayError(msg: string) {
             $('.error-msg:first').text(msg);
-            $('#login-mail').trigger('focus');
+            loginMail.trigger('focus');
             return $('#login-password').val('');
         }
 
     }
 
     // ----- LOGIN WITH TOKEN -----
+
+    const contentLoginToken = $('#content-login-token');
+    const loginToken = $('#login-token');
 
     /**
      * Displays the login form in the `#content` div and makes the ajax request when submitted
@@ -334,12 +339,12 @@ $(function () {
         });
 
         allowChoseCategory = false;
-        $('#content-login-token').clone().appendTo(contentDiv).show();
+        contentLoginToken.clone().appendTo(contentDiv).show();
 
-        $('#login-token').trigger('focus');
+        loginToken.trigger('focus');
         let mask = $('#content-login-token .mask');
 
-        $('#content-login-token').on('submit', function () {
+        contentLoginToken.on('submit', function () {
 
             mask.fadeIn();
 
@@ -347,7 +352,7 @@ $(function () {
                 method: 'GET',
                 url: `${flowshareURLs.api}account.php`,
                 data: {
-                    token: $('#login-token').val(),
+                    token: loginToken.val(),
                 },
                 timeout: 5000,
                 success: (data: string) => {
@@ -388,7 +393,7 @@ $(function () {
             console.log(args);
 
             Cookies.set('account', {
-                token: $('#login-token').val(),
+                token: loginToken.val(),
                 username: reqData['username'],
                 expires: args ? 365 : 0,
             }, args);
@@ -399,12 +404,15 @@ $(function () {
 
         function displayError(msg: string) {
             $('.error-msg:first').text(msg);
-            $('#login-token').trigger('focus');
+            loginToken.trigger('focus');
         }
 
     }
 
     // ----- REGISTER -----
+
+    const contentRegister = $('#content-register');
+    const registerEmail = $('#register-email');
 
     function displayRegisterForm() {
 
@@ -416,18 +424,18 @@ $(function () {
         });
 
         allowChoseCategory = false;
-        $('#content-register').clone().appendTo(contentDiv).show();
+        contentRegister.clone().appendTo(contentDiv).show();
 
-        $('#register-email').trigger('focus');
+        registerEmail.trigger('focus');
         // let mask = $('#content-register .mask');
 
         //todo: finish register part
         alert('This functionality is WIP. Please create an account with the flowshare flow.');
 
-        $('#content-register').on('submit', function () {
+        contentRegister.on('submit', function () {
 
             let requestData = {
-                email: $('#register-email').val(),
+                email: registerEmail.val(),
                 password: $('#register-password-1').val(),
                 username: $('#register-username').val(),
             };
@@ -459,7 +467,7 @@ $(function () {
         function displayError(msg: string) {
             $('.error-msg:first').text(msg);
             $('#register-password-1, #register-password-2').val('');
-            $('#register-email').trigger('focus');
+            registerEmail.trigger('focus');
         }
 
     }
@@ -544,7 +552,7 @@ $(function () {
 
                 if (data.error) return errorMsg.text(data.error);
 
-                $('#content').html(
+                contentDiv.html(
                     `<div id="loading-message">Response: ${data.response}${data.id ? `, flow id: ${data.id}` : ''}</div>`,
                 );
 
@@ -565,9 +573,10 @@ $(function () {
      */
     function displayDailyShareCoins() {
 
-        let dailyButton = $('#daily-button');
-        let mask = $('#content-daily .mask');
-        let errorMsg = $('#content-daily .error-msg').css('padding-top', '10px');
+        const dailyButton = $('#daily-button');
+        const mask = $('#content-daily .mask');
+        const errorMsg = $('#content-daily .error-msg')
+            .css('padding-top', '10px');
 
         dailyButton.on('click', function () {
 
