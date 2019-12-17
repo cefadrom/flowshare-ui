@@ -111,6 +111,11 @@ header {
       font-size: 40px;
     }
 
+    &:link, &:visited {
+      color: #2d3436;
+      text-decoration: none;
+    }
+
   }
 
   #header-account-popup {

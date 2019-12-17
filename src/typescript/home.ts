@@ -356,18 +356,6 @@ $(function () {
 
     // todo: check token
 
-    $('#header-account').on('click.flowshare', () => {
-
-        // redirect on account page
-        let loc = window.location.href;
-
-        if (loc.match(/\/home\/.*/))
-            window.location.href = `${loc.replace(/home\/.*/, '')}account/`;
-        else
-            window.location.href = `${loc.split('/').slice(0, -1).join('/')}/account/`;
-
-    });
-
 
     // ----------------------------------------------------------------------------------------------
     // ---------------------------------------- LOAD FILTERS ----------------------------------------
