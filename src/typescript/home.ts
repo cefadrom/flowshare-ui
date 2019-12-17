@@ -218,7 +218,7 @@ $(function () {
 
     let searchResultData: any;   // array with result flows from search
 
-    searchTxtElement.on('blur', () => {   // remove instant search on text blur
+    searchTxtElement.on('blur focusout', () => {   // remove instant search on text blur
         setTimeout(     // timeout because if it's disappear too fast the user can't click on the search results
             () => {
                 searchBarResize(false);
