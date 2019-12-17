@@ -18,7 +18,7 @@ header {
   background: $bg-dark;
   position: fixed;
   box-shadow: 0 2px 2px #97a3a5;
-  z-index: 3;
+  z-index: 10;
 
   #logo-big {
     background-image: url('../img/flowshare-wide.png');

@@ -47,9 +47,6 @@ $(function () {
         api: 'https://rasphost.com/flowshare/',
     };
 
-    const contentLogin = $('#content-login');
-    const loginMail = $('#login-mail');
-
     // ----- TEMPLATE MANAGER -----
 
     const templates = {
@@ -83,20 +80,17 @@ $(function () {
      * Append a container from templates to a div
      * @param templateName The template name
      * @param previousDiv The div to append the container
-     * @param callback The callback function when the element is displayed
      */
     function setTemplate(
         templateName: 'daily' | 'login' | 'loginToken' | 'register' | 'account' | 'upload',
         previousDiv: JQuery,
-        callback?: (id: string, newElement: JQuery) => void,
-    ) {
+    ): JQuery {
         const { element, id } = templates[templateName];
-        const newElement = element
+        return element
             .clone()
             .attr('id', id)
             .appendTo(previousDiv)
             .show();
-        if (callback) callback(id, newElement);
     }
 
 
@@ -105,6 +99,7 @@ $(function () {
     // --------------------------------------------------------------------------------------------
 
     let allowChoseCategory: boolean = true;
+    let selectedCategory = 'account';
 
     const contentDiv = $('#content');
     const categoryDiv = $('.category');
@@ -119,7 +114,7 @@ $(function () {
             $(this).css('backgroundColor', '#fdcb6e');
 
             let category = $(this).attr('data-nav-value');
-            if (category)
+            if (category === 'account' || category === 'upload' || category === 'daily')
                 setCategory(category);
             else
                 console.error('Category is undefined');
@@ -131,27 +126,29 @@ $(function () {
 
     /**
      * Displays the selected category in the content window
-     * @param name HTML ID of the element to display
+     * @param template name of the template to display
      */
-    function setCategory(name: string) {
+    function setCategory(template: 'account' | 'upload' | 'daily') {
+
+        if (template === selectedCategory)
+            return;
+        else
+            selectedCategory = template;
 
         contentDiv.html('');
-        $(name).clone().css('display', 'block').appendTo('#content');
 
-        if (name === '#content-account') {
-            let data: AccountCookie = Cookies.getJSON('account');
-            $('#content-account .title:first').text(`Connected as ${data['username']}`);
-        }
+        if (template === 'account')
+            displayAccountData();
 
-        if (name === '#content-upload')
+        if (template === 'upload')
             displayUploadFlowForm();
 
-        if (name === '#content-daily')
+        if (template === 'daily')
             displayDailyShareCoins();
 
     }
 
-    setTimeout(function () {
+    setTimeout(() => {
         categoryDiv.css('transition', '.4s');
     }, 400);
 
@@ -197,12 +194,12 @@ $(function () {
     // ---------------------------------------- ACCOUNT PART ----------------------------------------
     // ----------------------------------------------------------------------------------------------
 
-    contentDiv.html('');
-
     if (!Cookies.get('account'))
         displayLoginForm();
-    else
+    else {
+        console.log('Starting account data');
         displayAccountData();
+    }
 
     // ----- ACCOUNT DATA -----
 
@@ -210,7 +207,7 @@ $(function () {
     /**
      * Makes the query if there is no data and displays the content in the `#content-account` div
      * If data is supplied, just displays it in the content
-     * @param data
+     * @param data Specify the data to display. If not, the data will be queried
      */
     function displayAccountData(data?: AccountData) {
 
@@ -258,15 +255,13 @@ $(function () {
             let newCookie: AccountCookie = { ...account, email: data['email'], username: data['username'] };
             Cookies.set('account', newCookie, cookieExpires);
 
-            setTemplate('account', contentDiv, (id) => {
+            setTemplate('account', contentDiv);
 
-                $(`#${id} #content-account .title:first`).html(`Connected as ${data['username']}<br>${data['coins']} sharecoins`);
+            $(`#content-account .title:first`).html(`Connected as ${data['username']}<br>${data['coins']} sharecoins`);
 
-                $(`#${id} #account-logout`).on('click.flowshare', function () {
-                    Cookies.remove('account');
-                    displayLoginForm(null, data['email']);
-                });
-
+            $(`#account-logout`).on('click.flowshare', function () {
+                Cookies.remove('account');
+                displayLoginForm(null, data['email']);
             });
 
         }
@@ -290,90 +285,90 @@ $(function () {
         });
 
         allowChoseCategory = false;
-        setTemplate('login', contentDiv, ((id, newElement) => {
+        const newElement = setTemplate('login', contentDiv);
+        const loginMail = $('#login-mail');
+        const mask = $(`#content-login .mask`);
+        loginMail.trigger('focus');
 
-            let mask = $('#content-login .mask:first');
+        if (error) displayError(error);
+
+        if (!email && Cookies.getJSON('account'))
+            email = Cookies.getJSON('account')['email'];
+
+        if (email) {
+            loginMail.val(email);
+            $('#login-password').trigger('focus');
+        } else {
             loginMail.trigger('focus');
+        }
 
-            if (error) displayError(error);
+        newElement.on('submit', function () {
 
-            if (!email && Cookies.getJSON('account')) email = Cookies.getJSON('account')['email'];
+            mask.fadeIn();
 
-            if (email) {
-                loginMail.val(email);
-                $('#login-password').trigger('focus');
-            } else {
-                loginMail.trigger('focus');
-            }
-
-            newElement.on('submit', function () {
-
-                mask.fadeIn();
-
-                $.ajax({
-                    method: 'POST',
-                    url: `${flowshareURLs.api}login.php`,
-                    data: {
-                        email: loginMail.val(),
-                        password: $('#login-password').val(),
-                    },
-                    success: (data: string) => {
-                        loginResult(data);
-                    },
-                    error: (e) => {
-                        mask.fadeOut();
-                        displayError(`AJAX error: response status ${e.status}. Please try later or contact the administrator`);
-                    },
-                });
-
+            $.ajax({
+                method: 'POST',
+                url: `${flowshareURLs.api}login.php`,
+                data: {
+                    email: loginMail.val(),
+                    password: $('#login-password').val(),
+                },
+                success: (data: string) => {
+                    loginResult(data);
+                },
+                error: (e) => {
+                    mask.fadeOut();
+                    displayError(`AJAX error: response status ${e.status}. Please try later or contact the administrator`);
+                },
             });
 
-            $('#content-login .additional-button').on('click.flowshare', function () {
+        });
 
-                if ($(this).attr('data-ref') === 'token')
-                    displayTokenLoginForm();
-                else
-                    displayRegisterForm();
+        $('#content-login .additional-button').on('click.flowshare', function () {
 
-            });
+            if ($(this).attr('data-ref') === 'token')
+                displayTokenLoginForm();
+            else
+                displayRegisterForm();
 
-            function loginResult(data: string) {
+        });
 
-                mask.fadeOut();
+        function loginResult(data: string) {
 
-                let reqData: LoginRequest;
-                try {
-                    reqData = JSON.parse(data);
-                } catch (e) {
-                    return displayError(`Error: ${e}, response body: ${data}`);
-                }
+            mask.fadeOut();
 
-                if (reqData['error']) return displayError(reqData['error']);
-
-                if (reqData['response'] !== 'OK') return displayError(`An error occurs, response body: ${JSON.stringify(data)}`);
-
-                let args: { expires: number } | undefined;
-                if ($('#content-login #login-remember:checked').length) // if the user checked the "remember me" option
-                    args = { expires: 365 };
-
-                Cookies.set('account', {
-                    token: reqData['token'],
-                    expires: args ? 365 : 0,
-                }, args);
-
-                displayAccountData();
-
+            let reqData: LoginRequest;
+            try {
+                reqData = JSON.parse(data);
+            } catch (e) {
+                return displayError(`Error: ${e}, response body: ${data}`);
             }
 
-            //TODO: fix template system triggers
+            if (reqData['error']) return displayError(reqData['error']);
 
-            function displayError(msg: string) {
-                $('.error-msg:first').text(msg);
-                loginMail.trigger('focus');
-                return $('#login-password').val('');
-            }
+            if (reqData['response'] !== 'OK') return displayError(`An error occurs, response body: ${JSON.stringify(data)}`);
 
-        }));
+            let args: { expires: number } | undefined;
+            if ($('#content-login #login-remember:checked').length) // if the user checked the "remember me" option
+                args = { expires: 365 };
+
+            Cookies.set('account', {
+                token: reqData['token'],
+                expires: args ? 365 : 0,
+            }, args);
+
+            displayAccountData();
+
+        }
+
+        //TODO: fix template system triggers
+
+        function displayError(msg: string) {
+            $('.error-msg:first').text(msg);
+            loginMail.trigger('focus');
+            return $('#login-password').val('');
+        }
+
 
     }
 
@@ -393,9 +388,8 @@ $(function () {
         });
 
         allowChoseCategory = false;
-        setTemplate('loginToken', contentDiv);
 
-        const contentLoginToken = $('#content-login-token');
+        const contentLoginToken = setTemplate('loginToken', contentDiv);
         const loginToken = $('#login-token');
 
         loginToken.trigger('focus');
@@ -468,7 +462,6 @@ $(function () {
 
     // ----- REGISTER -----
 
-    const contentRegister = $('#content-register');
     const registerEmail = $('#register-email');
 
     function displayRegisterForm() {
@@ -481,7 +474,7 @@ $(function () {
         });
 
         allowChoseCategory = false;
-        setTemplate('register', contentDiv);
+        const contentRegister = setTemplate('register', contentDiv);
 
         registerEmail.trigger('focus');
         // let mask = $('#content-register .mask');
@@ -538,6 +531,8 @@ $(function () {
      * Displays the form for flow uploading in the `#content` div, and uploads the flow when submitted
      */
     function displayUploadFlowForm() {
+
+        setTemplate('upload', contentDiv);
 
         let flowData: string,
             uploadTitle = $('#upload-title'),
@@ -629,6 +624,8 @@ $(function () {
      * Displays the button to get the sharecoins in the `#content` div, and makes the queries when the button is pressed
      */
     function displayDailyShareCoins() {
+
+        setTemplate('daily', contentDiv);
 
         const dailyButton = $('#daily-button');
         const mask = $('#content-daily .mask');
