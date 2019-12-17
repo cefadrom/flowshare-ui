@@ -73,6 +73,28 @@ $(function () {
 
     });
 
+    interface popupParams {
+        message: string;
+        timeout?: number;
+        title?: string;
+        callback?: (timeoutCancel: boolean) => void;
+    }
+
+    function popup(params: popupParams) {
+
+        const { message, title = '', timeout, callback } = params;
+
+        body.append(
+            $('<div class="popup-window"></div>').append(
+                `<div class="popup-title">${title}</div>`,
+                `<div class="popup-body">${message}</div>`,
+            ),
+        );
+
+    }
+
+    popup({message: 'Hey boi ! I am the body of a test for the toasts for the flowshare projects', title: 'Hello buddies'});
+
 
     // --------------------------------------------------------------------------------------------------
     // ---------------------------------------- CHECKING ACCOUNT ----------------------------------------
