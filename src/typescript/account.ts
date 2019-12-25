@@ -31,17 +31,17 @@ $(function () {
     // ---------------------------------------- GLOBAL ----------------------------------------
     // ----------------------------------------------------------------------------------------
 
-    let windowWidth = <number>$(window).width();
+    let _windowWidth = <number>$(window).width();
 
     $(window).on('resize', function () {
 
-        windowWidth = <number>$(this).width();
+        _windowWidth = <number>$(this).width();
 
         categoryWindowResize();
 
     });
 
-    const flowshareURLs = {
+    const _flowshareURLs = {
         homepage: 'https://rasphost.com/flowshare/web/test/home/',
         homepageDir: '/flowshare/web/test/home/',
         api: 'https://rasphost.com/flowshare/',
@@ -49,7 +49,7 @@ $(function () {
 
     // ----- TEMPLATE MANAGER -----
 
-    const templates = {
+    const _templates = {
         daily: {
             element: $('#content-daily-template'),
             id: 'content-daily',
@@ -85,7 +85,7 @@ $(function () {
         templateName: 'daily' | 'login' | 'loginToken' | 'register' | 'account' | 'upload',
         previousDiv: JQuery,
     ): JQuery {
-        const { element, id } = templates[templateName];
+        const { element, id } = _templates[templateName];
         return element
             .clone()
             .attr('id', id)
@@ -98,17 +98,17 @@ $(function () {
     // ---------------------------------------- CATEGORIES ----------------------------------------
     // --------------------------------------------------------------------------------------------
 
-    let allowChoseCategory: boolean = true;
-    let selectedCategory = 'account';
+    let _allowChoseCategory: boolean = true;
+    let _selectedCategory = 'account';
 
-    const contentDiv = $('#content');
-    const categoryDiv = $('.category');
+    const _contentDiv = $('#content');
+    const _categoryDiv = $('.category');
 
     $('.category:first').css('backgroundColor', '#fdcb6e');
 
-    categoryDiv.on('click.flowshare', function () {
+    _categoryDiv.on('click.flowshare', function () {
 
-        if (allowChoseCategory) {
+        if (_allowChoseCategory) {
 
             $('.category').css('backgroundColor', 'transparent');
             $(this).css('backgroundColor', '#fdcb6e');
@@ -130,12 +130,12 @@ $(function () {
      */
     function setCategory(template: 'account' | 'upload' | 'daily') {
 
-        if (template === selectedCategory)
+        if (template === _selectedCategory)
             return;
         else
-            selectedCategory = template;
+            _selectedCategory = template;
 
-        contentDiv.html('');
+        _contentDiv.html('');
 
         if (template === 'account')
             displayAccountData();
@@ -149,37 +149,37 @@ $(function () {
     }
 
     setTimeout(() => {
-        categoryDiv.css('transition', '.4s');
+        _categoryDiv.css('transition', '.4s');
     }, 400);
 
 
     // ----- CATEGORY STYLE -----
 
-    let isNavExtended = true;
-    let allowNavExtend = windowWidth < 1000;
+    let _isNavExtended = true;
+    let _allowNavExtend = _windowWidth < 1000;
 
-    if (windowWidth < 1000) $('#nav-arrow').show();
+    if (_windowWidth < 1000) $('#nav-arrow').show();
 
     $('nav .title').on('click', function () {
-        extentNav(isNavExtended);
-        isNavExtended = !isNavExtended;
+        extentNav(_isNavExtended);
+        _isNavExtended = !_isNavExtended;
     });
 
     function categoryWindowResize() {
-        if (windowWidth < 1000) {
+        if (_windowWidth < 1000) {
             extentNav(true);
-            allowNavExtend = true;
+            _allowNavExtend = true;
             $('#nav-arrow').show();
         } else {
             extentNav(false);
-            allowNavExtend = false;
+            _allowNavExtend = false;
             $('#nav-arrow').hide();
         }
-        isNavExtended = <number>$('nav').height() < 100;
+        _isNavExtended = <number>$('nav').height() < 100;
     }
 
     function extentNav(extend?: boolean) {
-        if (!allowNavExtend) return;
+        if (!_allowNavExtend) return;
         if (extend) {
             $('nav').css('height', '60px');
             $('#nav-arrow').removeClass('active');
@@ -211,13 +211,13 @@ $(function () {
      */
     function displayAccountData(data?: AccountData) {
 
-        contentDiv.html('<div id="loading-message">Loading data...</div>');
+        _contentDiv.html('<div id="loading-message">Loading data...</div>');
 
-        categoryDiv.css({
+        _categoryDiv.css({
             cursor: 'pointer',
             opacity: '1',
         });
-        allowChoseCategory = true;
+        _allowChoseCategory = true;
 
         if (data) return displayContent(data);
 
@@ -225,7 +225,7 @@ $(function () {
 
         $.ajax({
             method: 'GET',
-            url: `${flowshareURLs.api}account.php`,
+            url: `${_flowshareURLs.api}account.php`,
             data: { token: account['token'] },
             success: (data: string) => {
 
@@ -248,14 +248,14 @@ $(function () {
 
         function displayContent(data: AccountData) {
 
-            contentDiv.html('');
+            _contentDiv.html('');
 
             let account: AccountCookie = Cookies.getJSON('account');
             let cookieExpires = account.expires === 0 ? undefined : { expires: account.expires };
             let newCookie: AccountCookie = { ...account, email: data['email'], username: data['username'] };
             Cookies.set('account', newCookie, cookieExpires);
 
-            setTemplate('account', contentDiv);
+            setTemplate('account', _contentDiv);
 
             $(`#content-account .title:first`).html(`Connected as ${data['username']}<br>${data['coins']} sharecoins`);
 
@@ -277,15 +277,15 @@ $(function () {
      */
     function displayLoginForm(error?: string | null, email?: string) {
 
-        contentDiv.html('');
+        _contentDiv.html('');
 
-        categoryDiv.css({
+        _categoryDiv.css({
             cursor: 'not-allowed',
             opacity: '.6',
         });
 
-        allowChoseCategory = false;
-        const newElement = setTemplate('login', contentDiv);
+        _allowChoseCategory = false;
+        const newElement = setTemplate('login', _contentDiv);
         const loginMail = $('#login-mail');
         const mask = $(`#content-login .mask`);
         loginMail.trigger('focus');
@@ -308,7 +308,7 @@ $(function () {
 
             $.ajax({
                 method: 'POST',
-                url: `${flowshareURLs.api}login.php`,
+                url: `${_flowshareURLs.api}login.php`,
                 data: {
                     email: loginMail.val(),
                     password: $('#login-password').val(),
@@ -380,16 +380,16 @@ $(function () {
      */
     function displayTokenLoginForm() {
 
-        contentDiv.html('');
+        _contentDiv.html('');
 
-        categoryDiv.css({
+        _categoryDiv.css({
             cursor: 'not-allowed',
             opacity: '.6',
         });
 
-        allowChoseCategory = false;
+        _allowChoseCategory = false;
 
-        const contentLoginToken = setTemplate('loginToken', contentDiv);
+        const contentLoginToken = setTemplate('loginToken', _contentDiv);
         const loginToken = $('#login-token');
 
         loginToken.trigger('focus');
@@ -401,7 +401,7 @@ $(function () {
 
             $.ajax({
                 method: 'GET',
-                url: `${flowshareURLs.api}account.php`,
+                url: `${_flowshareURLs.api}account.php`,
                 data: {
                     token: loginToken.val(),
                 },
@@ -462,21 +462,21 @@ $(function () {
 
     // ----- REGISTER -----
 
-    const registerEmail = $('#register-email');
+    const _registerEmail = $('#register-email');
 
     function displayRegisterForm() {
 
-        contentDiv.html('');
+        _contentDiv.html('');
 
-        categoryDiv.css({
+        _categoryDiv.css({
             cursor: 'not-allowed',
             opacity: '.6',
         });
 
-        allowChoseCategory = false;
-        const contentRegister = setTemplate('register', contentDiv);
+        _allowChoseCategory = false;
+        const contentRegister = setTemplate('register', _contentDiv);
 
-        registerEmail.trigger('focus');
+        _registerEmail.trigger('focus');
         // let mask = $('#content-register .mask');
 
         //todo: finish register part
@@ -485,7 +485,7 @@ $(function () {
         contentRegister.on('submit', function () {
 
             let requestData = {
-                email: registerEmail.val(),
+                email: _registerEmail.val(),
                 password: $('#register-password-1').val(),
                 username: $('#register-username').val(),
             };
@@ -517,7 +517,7 @@ $(function () {
         function displayError(msg: string) {
             $('.error-msg:first').text(msg);
             $('#register-password-1, #register-password-2').val('');
-            registerEmail.trigger('focus');
+            _registerEmail.trigger('focus');
         }
 
     }
@@ -532,7 +532,7 @@ $(function () {
      */
     function displayUploadFlowForm() {
 
-        setTemplate('upload', contentDiv);
+        setTemplate('upload', _contentDiv);
 
         let flowData: string,
             uploadTitle = $('#upload-title'),
@@ -570,7 +570,7 @@ $(function () {
 
             $.ajax({
                 method: 'POST',
-                url: `${flowshareURLs.api}flows.php`,
+                url: `${_flowshareURLs.api}flows.php`,
                 data: {
                     title: title,
                     description: description,
@@ -604,7 +604,7 @@ $(function () {
 
                 if (data.error) return errorMsg.text(data.error);
 
-                contentDiv.html(
+                _contentDiv.html(
                     `<div id="loading-message">Response: ${data.response}${data.id ? `, flow id: ${data.id}` : ''}</div>`,
                 );
 
@@ -625,7 +625,7 @@ $(function () {
      */
     function displayDailyShareCoins() {
 
-        setTemplate('daily', contentDiv);
+        setTemplate('daily', _contentDiv);
 
         const dailyButton = $('#daily-button');
         const mask = $('#content-daily .mask');
@@ -639,7 +639,7 @@ $(function () {
 
             $.ajax({
                 method: 'POST',
-                url: `${flowshareURLs.api}daily.php`,
+                url: `${_flowshareURLs.api}daily.php`,
                 data: {
                     token: token,
                 },
