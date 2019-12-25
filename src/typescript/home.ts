@@ -50,11 +50,11 @@ $(function () {
     // ---------------------------------------- GLOBAL FUNCTIONS ----------------------------------------
     // --------------------------------------------------------------------------------------------------
 
-    let windowWidth = <number>$(window).width();
-    let windowHeight = <number>$(window).height();
+    let _windowWidth = <number>$(window).width();
+    let _windowHeight = <number>$(window).height();
 
-    let body = $('body');
-    const flowshareURLs = {
+    let _body = $('body');
+    const _flowshareURLs = {
         homepage: 'https://rasphost.com/flowshare/web/test/home/',
         homepageDir: '/flowshare/web/test/home/',
         api: 'https://rasphost.com/flowshare/',
@@ -62,8 +62,8 @@ $(function () {
 
     $(window).on('resize', () => {
 
-        windowWidth = <number>$(window).width();
-        windowHeight = <number>$(window).height();
+        _windowWidth = <number>$(window).width();
+        _windowHeight = <number>$(window).height();
 
         searchBarWindowResize();
 
@@ -77,42 +77,76 @@ $(function () {
         message: string;
         timeout?: number;
         title?: string;
-        callback?: (timeoutCancel: boolean) => void;
+        callback?: (choice: 0 | 1 | null, timeoutCancel: boolean) => void;
+        buttons: [ string, string | null ];
     }
+
+    const _screenBlur = $('#screen-blur');
 
     function popup(params: popupParams) {
 
-        const { message, title = '', timeout, callback } = params;
+        const { message, title = '', timeout, callback, buttons } = params;
 
-        body.append(
-            $('<div class="popup-window"></div>').append(
-                `<div class="popup-title">${title}</div>`,
-                `<div class="popup-body">${message}</div>`,
-            ),
+        _screenBlur.addClass('active');
+
+        let popup = $('<div class="popup-window"></div>').append(
+            `<div class="popup-title">${title}</div>`,
+            `<div class="popup-body">${message}</div>`,
+            `<div class="popup-button" data-choice="0">${buttons[0]}</div>`,
+            buttons[1] ? `<div class="popup-button" data-choice="1">${buttons[1]}</div>` : '',
         );
+        _body.append(popup);
+
+        let timeoutVar: number;
+        if (timeout)
+            timeoutVar = setTimeout(dismissPopup, timeout, null, true);
+
+        $('.popup-button').on('click', function () {
+            dismissPopup(
+                <0 | 1>parseInt(<string>$(this).attr('data-choice')),
+                false,
+            );
+        });
+
+        function dismissPopup(choice: 0 | 1 | null, timeoutCancel: boolean) {
+            if (timeoutVar)
+                clearTimeout(timeoutVar);
+            popup.remove();
+            _screenBlur.removeClass('active');
+            if (callback)
+                callback(choice, timeoutCancel);
+        }
 
     }
 
-    popup({message: 'Hey boi ! I am the body of a test for the toasts for the flowshare projects', title: 'Hello buddies'});
+    popup({
+        message: 'Hey boi ! I am the body of a test for the toasts for the flowshare projects',
+        title: 'Hello buddies',
+        buttons: [ 'Ok', null ],
+        timeout: 10000,
+        callback: (choice, timeoutCancel) => {
+            console.log({ choice, timeoutCancel });
+        },
+    });
 
 
     // --------------------------------------------------------------------------------------------------
     // ---------------------------------------- CHECKING ACCOUNT ----------------------------------------
     // --------------------------------------------------------------------------------------------------
 
-    let account: AccountCookie | null = Cookies.getJSON('account'),
-        accountPopup = $('#header-account-popup'),
-        headerAccountUser = $('#header-account-user');
+    let _account: AccountCookie | null = Cookies.getJSON('account'),
+        _accountPopup = $('#header-account-popup'),
+        _headerAccountUser = $('#header-account-user');
 
-    if (account && account['token']) {
+    if (_account && _account['token']) {
 
-        headerAccountUser.text('Connecting...');
+        _headerAccountUser.text('Connecting...');
 
         $.ajax({
             method: 'GET',
-            url: `${flowshareURLs.api}account.php`,
+            url: `${_flowshareURLs.api}account.php`,
             data: {
-                token: account['token'],
+                token: _account['token'],
             },
             success: (data: string) => {
 
@@ -124,39 +158,39 @@ $(function () {
                 }
 
                 if (reqData['error']) {
-                    account = null;
-                    headerAccountUser.text('Account');
+                    _account = null;
+                    _headerAccountUser.text('Account');
                     toggleAccountPopup(true, reqData['error'], '#ff5b5f');
                     setTimeout(toggleAccountPopup, 8000, false);
 
                     if (!Cookies.getJSON('account')['email']) Cookies.remove('account');
                 }
 
-                headerAccountUser.text(reqData['username']);
+                _headerAccountUser.text(reqData['username']);
 
             },
             error: () => {
                 toggleAccountPopup(true, 'AJAX error', '#ff5b5f');
-                headerAccountUser.text('Account');
+                _headerAccountUser.text('Account');
                 setTimeout(toggleAccountPopup, 8000, false);
             },
         });
 
     } else {
-        account = null;
+        _account = null;
     }
 
-    accountPopup.on('click.flowshare', () => {
+    _accountPopup.on('click.flowshare', () => {
         toggleAccountPopup(false);
     });
 
     function toggleAccountPopup(state: boolean, message?: string, color?: string) {
 
         if (!state) {
-            return accountPopup.fadeOut();
+            return _accountPopup.fadeOut();
         }
 
-        accountPopup
+        _accountPopup
             .text(<string>message)
             .css('backgroundColor', <string>color)
             .fadeIn();
@@ -168,22 +202,22 @@ $(function () {
     // ---------------------------------------- SEARCH BAR RESIZING ----------------------------------------
     // -----------------------------------------------------------------------------------------------------
 
-    let allowSearchBarResize: boolean = windowWidth < 750;
-    const resultContainer = $('#search-results');
-    const searchTxtElement = $('#search-txt');
-    const searchTxtInput = <HTMLInputElement>searchTxtElement.get(0);
+    let _allowSearchBarResize: boolean = _windowWidth < 750;
+    const _resultContainer = $('#search-results');
+    const _searchTxtElement = $('#search-txt');
+    const _searchTxtInput = <HTMLInputElement>_searchTxtElement.get(0);
 
 
     /**
      * Function triggered when the window width changes, in order to define if the search bar can be resized when hover
      */
     function searchBarWindowResize() {
-        allowSearchBarResize = windowWidth < 750;
+        _allowSearchBarResize = _windowWidth < 750;
     }
 
-    const searchBoxDiv = $('#search-box');
+    const _searchBoxDiv = $('#search-box');
 
-    searchBoxDiv.on('mouseenter mouseleave', e => {
+    _searchBoxDiv.on('mouseenter mouseleave', e => {
         if (e.type === 'mouseenter')
             searchBarResize(true);
         else
@@ -191,7 +225,7 @@ $(function () {
     });
 
 
-    let isSearchBarExtended: boolean = false;
+    let _isSearchBarExtended: boolean = false;
 
     /**
      * Extent or collapse the search bar in the header
@@ -199,36 +233,36 @@ $(function () {
      */
     function searchBarResize(showFull: boolean) { // manage search bar on mobile (takes entire screen when focused)
 
-        if (!allowSearchBarResize || isSearchBarExtended === showFull) return;    // if can't be resized (screen is too big or already extended)
+        if (!_allowSearchBarResize || _isSearchBarExtended === showFull) return;    // if can't be resized (screen is too big or already extended)
 
         if (showFull) { // full search bar
 
             $('#logo-big, #header-account').fadeOut(200);   // makes logo and account disappear
-            searchBoxDiv.css({  // expand global div
+            _searchBoxDiv.css({  // expand global div
                 width: '280px',
                 right: 'calc((100% - 280px) / 2)',
             });
-            searchTxtElement.css('width', '230px'); // expand search field
-            resultContainer.show(); // shows results
+            _searchTxtElement.css('width', '230px'); // expand search field
+            _resultContainer.show(); // shows results
 
             setTimeout(() => {
-                isSearchBarExtended = true;
-                searchTxtElement.trigger('focus'); // put focus on search field
-                searchTxtInput.setSelectionRange(999999, 999999); // put cursor at the end of the text
+                _isSearchBarExtended = true;
+                _searchTxtElement.trigger('focus'); // put focus on search field
+                _searchTxtInput.setSelectionRange(999999, 999999); // put cursor at the end of the text
             }, 100);
 
         } else {    // close search bar
 
             $('#logo-big, #header-account').fadeIn(200);    // makes logo and account appear
-            searchBoxDiv
+            _searchBoxDiv
                 .css({  // collapse global div
                     width: 'auto',
                     right: '120px',
                 })
                 .trigger('blur');    // remove the focus
-            searchTxtElement.css('width', '0');     // collapse search field
-            resultContainer.hide(); // hide results
-            isSearchBarExtended = false;
+            _searchTxtElement.css('width', '0');     // collapse search field
+            _resultContainer.hide(); // hide results
+            _isSearchBarExtended = false;
 
         }
     }
@@ -238,13 +272,13 @@ $(function () {
     // ---------------------------------------- SEARCH FUNCTION ----------------------------------------
     // -------------------------------------------------------------------------------------------------
 
-    let searchResultData: any;   // array with result flows from search
+    let _searchResultData: any;   // array with result flows from search
 
-    searchTxtElement.on('blur focusout', () => {   // remove instant search on text blur
+    _searchTxtElement.on('blur focusout', () => {   // remove instant search on text blur
         setTimeout(     // timeout because if it's disappear too fast the user can't click on the search results
             () => {
                 searchBarResize(false);
-                resultContainer
+                _resultContainer
                     .css('padding', '0')
                     .html('');
             },
@@ -256,12 +290,12 @@ $(function () {
 
     // ----- INSTANT SEARCH -----
 
-    searchTxtElement.on('keyup focus', function () {// trigger instant search
+    _searchTxtElement.on('keyup focus', function () {// trigger instant search
 
         let searchStr = <string>$(this).val() || '';  // text entered in the search field
 
         if (searchStr.match(/^ *$/))  // if field is blank
-            return resultContainer
+            return _resultContainer
                 .css('padding', '0')
                 .html('');
 
@@ -280,7 +314,7 @@ $(function () {
 
         $.ajax({
             method: 'GET',
-            url: `${flowshareURLs.api}search.php?instant&text=${encodeURI(str)}`,
+            url: `${_flowshareURLs.api}search.php?instant&text=${encodeURI(str)}`,
             timeout: 2000,
             success: (data: string) => {
 
@@ -293,7 +327,7 @@ $(function () {
 
                 if (reqData.error) return displayResult(null, reqData.error);
 
-                searchResultData = <Flow[]>reqData;
+                _searchResultData = <Flow[]>reqData;
                 displayResult(<Flow[]>reqData);
 
             },
@@ -305,19 +339,19 @@ $(function () {
         // Format result
         function displayResult(flowsData: Flow[] | null, error?: string | undefined) {
 
-            if (searchTxtElement.val() !== str) return;
+            if (_searchTxtElement.val() !== str) return;
 
-            resultContainer
+            _resultContainer
                 .css('padding', '8px')
                 .html('');
 
-            if (error) return resultContainer.append(
+            if (error) return _resultContainer.append(
                 $('<div class="result" style="cursor: default;"></div>').text(error),
             );
 
             $.each(flowsData, function (ind: string, val: Flow) {
 
-                resultContainer.append(
+                _resultContainer.append(
                     $(`<div class="result" data-flow-index="${ind}" data-flow-id="${val.id}"></div>`).text(val.title),
                 );
 
@@ -325,7 +359,7 @@ $(function () {
 
             $('.result').off('flowshare.click').on('click.flowshare', function () {
 
-                let flowData = searchResultData[<string>$(this).attr('data-flow-index')];
+                let flowData = _searchResultData[<string>$(this).attr('data-flow-index')];
                 let flowID = <string>$(this).attr('data-flow-id');
 
                 displayFullFlowData(flowData, flowID);
@@ -338,23 +372,23 @@ $(function () {
 
     // ----- GLOBAL SEARCH -----
 
-    searchBoxDiv.on('submit click', function (e) {     // starts global search
+    _searchBoxDiv.on('submit click', function (e) {     // starts global search
         const parentElement = <HTMLElement>e.target.parentElement;
         if (
             (e.target.id === 'search-btn' || parentElement.id === 'search-btn' || e.type !== 'click') // if the goof element or the good event is triggered
-            && (isSearchBarExtended  // if the search bar is not collapsed
-            || !allowSearchBarResize))   // if the search bar is too small so that the search bar can't be collapsed
-            globalSearch(<string>searchTxtElement.val());
+            && (_isSearchBarExtended  // if the search bar is not collapsed
+            || !_allowSearchBarResize))   // if the search bar is too small so that the search bar can't be collapsed
+            globalSearch(<string>_searchTxtElement.val());
     });
 
     function globalSearch(str: string) {
 
         if (str.match(/^[ ]*$/)) return;
 
-        searchFilters.search = str;
+        _searchFilters.search = str;
 
         let searchTags = new URLSearchParams();
-        $.each(searchFilters, (key: string, value) => {
+        $.each(_searchFilters, (key: string, value) => {
             searchTags.append(key, <string>value);
         });
         window.location.search = searchTags.toString();
@@ -383,7 +417,7 @@ $(function () {
     // ---------------------------------------- LOAD FILTERS ----------------------------------------
     // ----------------------------------------------------------------------------------------------
 
-    let searchFilters: {
+    let _searchFilters: {
         [key: string]: string | null
     } = {
         sort: null,
@@ -391,7 +425,7 @@ $(function () {
         search: null,
     };
 
-    let defaultFilterValues: {
+    let _defaultFilterValues: {
         [key: string]: {
             default?: string,
             display: boolean,
@@ -418,13 +452,13 @@ $(function () {
         },
     };
 
-    let searchTags = new URLSearchParams(window.location.search);
+    let _searchTags = new URLSearchParams(window.location.search);
 
-    let responseDiv = $('.response');
+    let _responseDiv = $('.response');
 
-    $.each(defaultFilterValues, (filterName: string, filterData: any) => {    // for each possible filters
+    $.each(_defaultFilterValues, (filterName: string, filterData: any) => {    // for each possible filters
 
-        let tag = searchTags.get(filterName) || filterData.default;  // getting actual value or set the default one
+        let tag = _searchTags.get(filterName) || filterData.default;  // getting actual value or set the default one
         let result;
 
         if (filterData.display) {    // if the value can be displayed
@@ -434,7 +468,7 @@ $(function () {
 
         } else result = true;
 
-        if (filterData.default !== tag && result) searchFilters[filterName] = tag;    // if not default then value put it in filters list
+        if (filterData.default !== tag && result) _searchFilters[filterName] = tag;    // if not default then value put it in filters list
     });
 
 
@@ -450,7 +484,7 @@ $(function () {
 
         if (displayType === 'filter') {
 
-            responseDiv.each(function () {
+            _responseDiv.each(function () {
                 if ($(this).attr('data-filter-value') !== value) return;  // if wrong div
                 $(this).parent().children('.response').css('backgroundColor', 'transparent');   // removing color of other fibers
                 $(this).css('backgroundColor', '#fdcb6e');  // setting color of selection
@@ -458,14 +492,14 @@ $(function () {
             });
 
         } else if (displayType === 'search') {
-            searchTxtElement.val(value);
+            _searchTxtElement.val(value);
             result = true;
         }
 
         return result;
     }
 
-    responseDiv.css('transition', '.4s');    // activating animation (disabled for fastest loading display)
+    _responseDiv.css('transition', '.4s');    // activating animation (disabled for fastest loading display)
 
 
     // --------------------------------------------------------------------------------------------------
@@ -474,14 +508,14 @@ $(function () {
 
     // ----- FILTERS STYLE -----
 
-    let isFilterExtended = true;
-    let allowFilterExtend = windowWidth < 1000;
+    let _isFilterExtended = true;
+    let _allowFilterExtend = _windowWidth < 1000;
 
-    if (windowWidth < 1000) $('#nav-arrow').show();
+    if (_windowWidth < 1000) $('#nav-arrow').show();
 
     $('nav .title').on('click', () => {
-        extentFilter(isFilterExtended);
-        isFilterExtended = !isFilterExtended;
+        extentFilter(_isFilterExtended);
+        _isFilterExtended = !_isFilterExtended;
     });
 
 
@@ -489,16 +523,16 @@ $(function () {
      * Function triggered when the window width changes, in order to define the position of the filter and if it can be extended
      */
     function filterWindowResize() {
-        if (windowWidth < 1000) {
+        if (_windowWidth < 1000) {
             extentFilter(true);
-            allowFilterExtend = true;
+            _allowFilterExtend = true;
             $('#nav-arrow').show();
         } else {
             extentFilter(false);
-            allowFilterExtend = false;
+            _allowFilterExtend = false;
             $('#nav-arrow').hide();
         }
-        isFilterExtended = <number>$('nav').width() < 100;
+        _isFilterExtended = <number>$('nav').width() < 100;
     }
 
 
@@ -507,7 +541,7 @@ $(function () {
      * @param extend `true` to extend, `false` to collapse
      */
     function extentFilter(extend: boolean): void {
-        if (!allowFilterExtend) return;
+        if (!_allowFilterExtend) return;
         if (extend) {
             $('nav').css('height', '60px');
             $('#nav-arrow').removeClass('active');
@@ -527,12 +561,12 @@ $(function () {
 
         let filterName = <string>sel.parent().attr('data-filter-name');
         let filterValue = <string>sel.attr('data-filter-value');
-        let isDefault = defaultFilterValues[filterName].default === filterValue;
+        let isDefault = _defaultFilterValues[filterName].default === filterValue;
 
         if (isDefault)
-            delete searchFilters[filterName];
+            delete _searchFilters[filterName];
         else
-            searchFilters[filterName] = filterValue;
+            _searchFilters[filterName] = filterValue;
 
     });
 
@@ -549,8 +583,8 @@ $(function () {
      */
     function applyFilters(reload: boolean): void {
         let searchTags = new URLSearchParams();
-        delete searchFilters.search;
-        $.each(searchFilters, (key: string, value) => {
+        delete _searchFilters.search;
+        $.each(_searchFilters, (key: string, value) => {
             if (value !== null)
                 searchTags.append(key, <string>value);
         });
@@ -568,16 +602,16 @@ $(function () {
     // ---------------------------------------- FLOWS BROWSER ----------------------------------------
     // -----------------------------------------------------------------------------------------------
 
-    let flowBrowserOffset = 0;
-    let flowBrowserFlows: Flow[] = [];
+    let _flowBrowserOffset = 0;
+    let _flowBrowserFlows: Flow[] = [];
 
-    if (!searchFilters.search)
-        queryTopFlows(<string>searchFilters.sort);
+    if (!_searchFilters.search)
+        queryTopFlows(<string>_searchFilters.sort);
     else
-        querySearchFlow(searchFilters.search);
+        querySearchFlow(_searchFilters.search);
 
-    let flowsRequestData: Flow[];
-    let flowContainerList = $('#flow-list-container');
+    let _flowsRequestData: Flow[];
+    let _flowContainerList = $('#flow-list-container');
 
 
     /**
@@ -586,14 +620,14 @@ $(function () {
      */
     function queryTopFlows(queryMode?: string) {
 
-        let data: any = { offset: flowBrowserOffset };
+        let data: any = { offset: _flowBrowserOffset };
 
         if (queryMode === 'rated')
             data['rated'] = 1;
 
         $.ajax({
             type: 'GET',
-            url: `${flowshareURLs.api}flows.php`,
+            url: `${_flowshareURLs.api}flows.php`,
             data: data,
             timeout: 5000,
             success: (data: string) => {
@@ -602,7 +636,7 @@ $(function () {
                     return;
                 let reqData = <Flow[]>decodeBrowserRequestData(data);
 
-                flowBrowserFlows = [ ...flowBrowserFlows, ...reqData ];
+                _flowBrowserFlows = [ ..._flowBrowserFlows, ...reqData ];
                 displayFlowsList();
 
             },
@@ -616,10 +650,10 @@ $(function () {
 
         $.ajax({
             type: 'GET',
-            url: `${flowshareURLs.api}search.php`,
+            url: `${_flowshareURLs.api}search.php`,
             data: {
                 text: str,
-                offset: flowBrowserOffset,
+                offset: _flowBrowserOffset,
             },
             timeout: 5000,
             success: (data: string) => {
@@ -628,8 +662,8 @@ $(function () {
                     return;
                 let reqData = <Flow[]>decodeBrowserRequestData(data);
 
-                flowBrowserFlows = [ ...flowBrowserFlows, ...reqData ];
-                const resultCount: number = flowBrowserFlows.length;
+                _flowBrowserFlows = [ ..._flowBrowserFlows, ...reqData ];
+                const resultCount: number = _flowBrowserFlows.length;
                 displayFlowsList(`${resultCount} result${resultCount > 1 ? 's' : ''}</span> for ${str}`, true);
 
             },
@@ -650,8 +684,8 @@ $(function () {
             return false;
         }
 
-        if (reqData.error && flowBrowserFlows.length === 0) {
-            flowContainerList.prepend('<i class="fas fa-chevron-circle-left back-arrow" id="flow-search-back-arrow" style="top: 5px; left: 5px"></i>');
+        if (reqData.error && _flowBrowserFlows.length === 0) {
+            _flowContainerList.prepend('<i class="fas fa-chevron-circle-left back-arrow" id="flow-search-back-arrow" style="top: 5px; left: 5px"></i>');
             flowSearchBackArrowPress();
             $('#flows-loading').html(`Error: ${reqData.error}`);
             return false;
@@ -663,17 +697,17 @@ $(function () {
 
     function displayFlowsList(header?: string, showBackButton?: boolean) {
 
-        let data: Flow[] = flowBrowserFlows;
+        let data: Flow[] = _flowBrowserFlows;
 
-        flowsRequestData = data;
+        _flowsRequestData = data;
 
-        flowContainerList.text('');
+        _flowContainerList.text('');
 
         if (header) {
 
             let backButton = showBackButton ? '<i class="fas fa-chevron-circle-left back-arrow" id="flow-search-back-arrow"></i>' : '';
 
-            flowContainerList.append(
+            _flowContainerList.append(
                 $(`<div class="header">${backButton}${header}</div><hr>`),
             );
 
@@ -683,7 +717,7 @@ $(function () {
 
         $.each(data, function (index, value: any) {
 
-            flowContainerList.append(
+            _flowContainerList.append(
                 $('<div class="flow-container"></div>').attr({
                     'data-flow-id': value['id'],
                     'data-flow-index': index,
@@ -716,22 +750,22 @@ $(function () {
 
     // ----- Scroll updates -----
 
-    let scrollingUpdate = false;
+    let _scrollingUpdate = false;
 
-    body.on('scroll', () => {
+    _body.on('scroll', () => {
 
-        let remainScroll = body.prop('scrollHeight') - <number>body.height() - <number>body.scrollTop();
+        let remainScroll = _body.prop('scrollHeight') - <number>_body.height() - <number>_body.scrollTop();
 
-        if (remainScroll < 200 && !scrollingUpdate) {
+        if (remainScroll < 200 && !_scrollingUpdate) {
 
-            flowBrowserOffset = 15;
+            _flowBrowserOffset = 15;
 
-            if (!searchFilters.search)
-                queryTopFlows(<string>searchFilters.sort);
+            if (!_searchFilters.search)
+                queryTopFlows(<string>_searchFilters.sort);
             else
-                querySearchFlow(<string>searchFilters.search);
+                querySearchFlow(<string>_searchFilters.search);
 
-            scrollingUpdate = true;
+            _scrollingUpdate = true;
 
         }
 
@@ -752,7 +786,7 @@ $(function () {
 
             let flowIndex = parseInt(<string>$(this).attr('data-flow-index'));
             let flowID = <string>$(this).attr('data-flow-id');
-            let flowData = flowsRequestData[flowIndex];
+            let flowData = _flowsRequestData[flowIndex];
 
             displayFullFlowData(flowData, flowID);
 
@@ -815,9 +849,9 @@ $(function () {
 
         // manage flow list
 
-        flowContainerList.css('opacity', 0);
+        _flowContainerList.css('opacity', 0);
         $('nav').css('opacity', 0);
-        body.css('pointerEvents', 'none');
+        _body.css('pointerEvents', 'none');
         $('header').css('pointerEvents', 'all');
 
         flowBackArrowClick();
@@ -825,7 +859,7 @@ $(function () {
         // query flow ratings
 
         $.ajax({
-            url: `${flowshareURLs.api}reviews.php?view&id=${flowID}`,
+            url: `${_flowshareURLs.api}reviews.php?view&id=${flowID}`,
             method: 'GET',
             timeout: 4000,
             success: (data: string) => {
@@ -851,7 +885,7 @@ $(function () {
 
         // update url
 
-        searchFilters['id'] = <string>flowID;
+        _searchFilters['id'] = <string>flowID;
         applyFilters(false);
 
     }
@@ -892,12 +926,12 @@ $(function () {
         const reviewForm = $('#review-add-form');
         $.ajax({
             type: 'POST',
-            url: `${flowshareURLs.api}reviews.php`,
+            url: `${_flowshareURLs.api}reviews.php`,
             data: {
                 add: '',
                 id: flowID,
                 comment: review,
-                token: (<AccountCookie>account).token,
+                token: (<AccountCookie>_account).token,
             },
             timeout: 5000,
             success: (data: string) => {
@@ -939,13 +973,13 @@ $(function () {
                 triggerFlowContainerClick();
                 $('#flow-list-container, nav')
                     .css('opacity', 1);
-                body
+                _body
                     .css('pointerEvents', 'all');
                 $('#flow-data')
                     .css('opacity', 0)
                     .css('pointerEvents', 'none')
                     .html('');
-                delete searchFilters.id;
+                delete _searchFilters.id;
                 applyFilters(false);
             });
 
@@ -968,7 +1002,7 @@ $(function () {
                 $(`<div class="rating-container">JSON Parsing error<br>Response body:<br>${error}</div>`),
             );
 
-        if (body.css('pointerEvents') === 'none' && data.length > 0) {
+        if (_body.css('pointerEvents') === 'none' && data.length > 0) {
 
             flowData.append(
                 $('<div style="position: relative; margin: 20px; font-size: 25px; font-weight: 600">Ratings</div>'),
@@ -1008,7 +1042,7 @@ $(function () {
     function downloadFlow(id: string | number, title: string) {
         $.ajax({
             method: 'GET',
-            url: `${flowshareURLs.api}flows.php/id/${id}?data&base64`,
+            url: `${_flowshareURLs.api}flows.php/id/${id}?data&base64`,
             timeout: 10000,
             success: (data: string) => {
                 let element = document.createElement('a');
@@ -1047,11 +1081,11 @@ $(function () {
         const footerDiv = $('footer'), filterDiv = $('nav');
         // determine the lowest container
         const filterBottom: number = filterDiv.position().top + (filterDiv.height() || 200) + 100;
-        const flowContainerBottom: number = flowContainerList.position().top + (flowContainerList.height() || 0) + 100;
+        const flowContainerBottom: number = _flowContainerList.position().top + (_flowContainerList.height() || 0) + 100;
         const bottomContainer: number = Math.max(filterBottom, flowContainerBottom);
 
         // set the footer position
-        if (bottomContainer < windowHeight - 85)
+        if (bottomContainer < _windowHeight - 85)
             footerDiv.css({
                 position: 'absolute',
             });
