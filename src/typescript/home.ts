@@ -119,17 +119,6 @@ $(function () {
 
     }
 
-    popup({
-        message: 'Hey boi ! I am the body of a test for the toasts for the flowshare projects',
-        title: 'Hello buddies',
-        buttons: [ 'Ok', null ],
-        timeout: 10000,
-        callback: (choice, timeoutCancel) => {
-            console.log({ choice, timeoutCancel });
-        },
-    });
-
-
     // --------------------------------------------------------------------------------------------------
     // ---------------------------------------- CHECKING ACCOUNT ----------------------------------------
     // --------------------------------------------------------------------------------------------------
@@ -897,15 +886,25 @@ $(function () {
      * @param flowID The ID of the flow on the community
      */
     function manageAddFlowReview(flowID: string | number) {
-        //TODO: prevent disconnected people to add a review
+
         const reviewForm = $('#review-add-form');
+
         // manage review button and area
         $('#review-button').on('click', function () {
-            $('#review-add-form, #review-button').addClass('enabled');
+            if (!_account)
+                popup({
+                    title: 'Account required',
+                    message: 'You need to be logged in to your flowshare account to post a comment',
+                    buttons: [ 'Ok', null ],
+                });
+            else
+                $('#review-add-form, #review-button').addClass('enabled');
         });
+
         $('#review-add-cancel').on('click', function () {
             $('#review-add-form, #review-button').removeClass('enabled');
         });
+
         // manage review adding
         $('#review-add-submit').on('click', function () {
             const reviewContent = <string>$('#review-add-form textarea').val();

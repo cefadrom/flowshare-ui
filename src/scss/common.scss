@@ -291,6 +291,10 @@ nav {
   z-index: 16;
   transition: .3s;
 
+  @media (max-width: 500px) {
+    width: 90%
+  }
+
   .popup-title {
     width: 100%;
     font-size: 20px;
