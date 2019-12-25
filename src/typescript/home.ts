@@ -78,14 +78,14 @@ $(function () {
         timeout?: number;
         title?: string;
         callback?: (choice: 0 | 1 | null, timeoutCancel: boolean) => void;
-        buttons: [ string, string | null ];
+        buttons?: [ string, string | null ];
     }
 
     const _screenBlur = $('#screen-blur');
 
     function popup(params: popupParams) {
 
-        const { message, title = '', timeout, callback, buttons } = params;
+        const { message, title = '', timeout, callback, buttons = [ 'Ok', null ] } = params;
 
         _screenBlur.addClass('active');
 
@@ -117,6 +117,14 @@ $(function () {
                 callback(choice, timeoutCancel);
         }
 
+    }
+
+    function displayError(error: string) {
+        popup({
+            title: 'An error occurs',
+            message: error,
+            timeout: 15000,
+        });
     }
 
     // --------------------------------------------------------------------------------------------------
@@ -895,7 +903,6 @@ $(function () {
                 popup({
                     title: 'Account required',
                     message: 'You need to be logged in to your flowshare account to post a comment',
-                    buttons: [ 'Ok', null ],
                 });
             else
                 $('#review-add-form, #review-button').addClass('enabled');
@@ -940,22 +947,25 @@ $(function () {
                 try {
                     requestData = JSON.parse(data);
                 } catch (e) {
-                    return alert(`JSON Parse error: ${e}\nRequest result: ${data}`);
+                    return displayError(`JSON Parse error: ${e}<br>Request result: ${data}`);
                 }
 
                 reviewForm.removeClass('query');
 
                 if (requestData.error)
-                    alert(requestData.error);
+                    displayError(requestData.error);
                 else
-                    alert(requestData.response);
+                    popup({
+                        title: 'Response',
+                        message: requestData.response
+                    });
 
                 //TODO: update comments on positive response
 
             },
             error: () => {
                 reviewForm.removeClass('query');
-                alert('Error when getting flows list: AJAX error<br>Please reload page or contact the site administrator.');
+                displayError('Error when getting flows list: AJAX error<br>Please reload page or contact the site administrator.');
             },
         });
 
@@ -1060,7 +1070,7 @@ $(function () {
                 document.body.removeChild(element);
             },
             error: (e) => {
-                alert(`Download error : ${e}`);
+                displayError(`Download error : ${e}`);
             },
         });
     }
