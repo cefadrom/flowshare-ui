@@ -165,22 +165,19 @@ nav {
   text-align: center;
   width: 300px;
   padding: 8px 0;
-  margin: 20px calc(50% - 150px);
+  margin: 20px 0;
+  left: 50%;
+  transform: translateX(-50%);
   font-size: 24px;
   background-color: transparent;
   border: 1px solid $theme-color;
   border-radius: 50px;
   cursor: pointer;
   transition: .4s;
-}
 
-#content-login input[type="submit"]:hover,
-#content-login-token input[type="submit"]:hover,
-#content-register input[type="submit"]:hover,
-#content-account input:hover,
-#content-upload input[type="submit"]:hover,
-#content-daily input:hover {
-  background-color: $theme-color;
+  &:hover {
+    background-color: $theme-color;
+  }
 }
 
 #content-login,
