@@ -38,6 +38,11 @@ interface FlowReview {
     isedited: '0' | '1';
 }
 
+interface ReqFlowReview extends FlowReview {
+    error?: string;
+    response?: string;
+}
+
 
 // ##########################################################################################
 // ######################################## APP CORE ########################################
@@ -887,6 +892,39 @@ $(function () {
 
     }
 
+    let _flowUserReview: string = '';
+
+    /**
+     * Query the user's review of a flow and display it the the flow review add textarea
+     * @param flowID the ID of the flow to display review
+     */
+    function displayUserFlowReview(flowID: string | number) {
+        if (_account)
+            $.ajax({
+                url: `${_flowshareURLs.api}reviews.php`,
+                method: 'GET',
+                data: {
+                    me: true,
+                    id: flowID,
+                    token: _account.token,
+                },
+                success: (data: string) => {
+
+                    let reqData: ReqFlowReview;
+                    try {
+                        reqData = JSON.parse(data);
+                    } catch (e) {
+                        return;
+                    }
+
+                    if (reqData.response && reqData.response === '1') {
+                        $('#review-add-form textarea').text(reqData.comment);
+                        _flowUserReview = reqData.comment;
+                    }
+
+                },
+            });
+    }
 
     /**
      * Manage all the actions related to the user review adding
@@ -894,6 +932,8 @@ $(function () {
      * @param flowID The ID of the flow on the community
      */
     function manageAddFlowReview(flowID: string | number) {
+
+        displayUserFlowReview(flowID);
 
         const reviewForm = $('#review-add-form');
 
@@ -912,7 +952,7 @@ $(function () {
             // Scroll to the textarea
             flowDataDiv.animate({
                 scrollTop: $('#rating-add-title').position().top + flowDataDiv.get(0).scrollTop - 10,
-            }, 300);
+            }, 400);
 
         });
 
@@ -923,9 +963,7 @@ $(function () {
         // manage review adding
         $('#review-add-submit').on('click', function () {
             const reviewContent = <string>$('#review-add-form textarea').val();
-            console.log(reviewContent);
-            if (reviewContent.length === 0) return;
-            console.log(reviewForm);
+            if (reviewContent.length === 0 || reviewContent === _flowUserReview) return;
             reviewForm.addClass('query');
             sendFlowReview(flowID, reviewContent);
         });
@@ -937,7 +975,10 @@ $(function () {
      * @param review {string} The text of the review
      */
     function sendFlowReview(flowID: string | number, review: string) {
+
+        _flowUserReview = review;
         const reviewForm = $('#review-add-form');
+
         $.ajax({
             type: 'POST',
             url: `${_flowshareURLs.api}reviews.php`,
