@@ -804,8 +804,6 @@ $(function () {
      */
     function displayFullFlowData(flowData: Flow, flowID: string) {
 
-        //TODO: pre-fill textarea with the actual comment if it exists
-
         $('#flow-data')
             .html('')
             .append(
@@ -860,6 +858,17 @@ $(function () {
 
         // query flow ratings
 
+        getFlowReviews(flowID);
+
+        // update url
+
+        _searchFilters['id'] = <string>flowID;
+        applyFilters(false);
+
+    }
+
+    function getFlowReviews(flowID: string | number) {
+
         $.ajax({
             url: `${_flowshareURLs.api}reviews.php?view&id=${flowID}`,
             method: 'GET',
@@ -885,11 +894,6 @@ $(function () {
 
         });
 
-        // update url
-
-        _searchFilters['id'] = <string>flowID;
-        applyFilters(false);
-
     }
 
     let _flowUserReview: string = '';
@@ -897,9 +901,12 @@ $(function () {
     /**
      * Query the user's review of a flow and display it the the flow review add textarea
      * @param flowID the ID of the flow to display review
+     * @param review The review to put if it's known
      */
-    function displayUserFlowReview(flowID: string | number) {
-        if (_account)
+    function displayUserFlowReview(flowID: string | number, review?: string) {
+
+        if (_account && !review) {
+
             $.ajax({
                 url: `${_flowshareURLs.api}reviews.php`,
                 method: 'GET',
@@ -917,13 +924,20 @@ $(function () {
                         return;
                     }
 
-                    if (reqData.response && reqData.response === '1') {
-                        $('#review-add-form textarea').text(reqData.comment);
-                        _flowUserReview = reqData.comment;
-                    }
+                    if (reqData.response && reqData.response === '1')
+                        updateTextarea(reqData.comment);
 
                 },
             });
+
+        } else if (review) {
+            updateTextarea(review);
+        }
+
+        function updateTextarea(data: string) {
+            $('#review-add-form textarea').text(data);
+            _flowUserReview = data;
+        }
     }
 
     /**
@@ -976,7 +990,6 @@ $(function () {
      */
     function sendFlowReview(flowID: string | number, review: string) {
 
-        _flowUserReview = review;
         const reviewForm = $('#review-add-form');
 
         $.ajax({
@@ -991,7 +1004,8 @@ $(function () {
             timeout: 5000,
             success: (data: string) => {
 
-                //TODO: better display
+                $('#review-add-cancel').trigger('click');   // Collapse rating area
+
                 let requestData: { response: string, error: string };
                 try {
                     requestData = JSON.parse(data);
@@ -999,20 +1013,23 @@ $(function () {
                     return displayError(`JSON Parse error: ${e}<br>Request result: ${data}`);
                 }
 
+                getFlowReviews(flowID);
+
                 reviewForm.removeClass('query');
 
                 if (requestData.error)
                     displayError(requestData.error);
-                else
+                else {
+                    displayUserFlowReview(flowID, review);
                     popup({
                         title: 'Response',
                         message: requestData.response,
                     });
-
-                //TODO: update comments on positive response
+                }
 
             },
             error: () => {
+                $('#review-add-cancel').trigger('click');   // Collapse rating area
                 reviewForm.removeClass('query');
                 displayError('Error when getting flows list: AJAX error<br>Please reload page or contact the site administrator.');
             },
@@ -1054,6 +1071,7 @@ $(function () {
         if (data === null) return;
 
         let flowData = $('#flow-data');
+        $('.rating-container, #rating-area-title').remove(); // remove all the previous ratings
 
         if (error)
             flowData.append(
@@ -1063,7 +1081,7 @@ $(function () {
         if (_body.css('pointerEvents') === 'none' && data.length > 0) {
 
             flowData.append(
-                $('<div style="position: relative; margin: 20px; font-size: 25px; font-weight: 600">Ratings</div>'),
+                $('<div id="rating-area-title" >Ratings</div>'),
             );
 
             $.each(data, function (index, value) {
