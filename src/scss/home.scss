@@ -1,12 +1,6 @@
 @import "common";
-@import "variables";
 
 html, body {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
   background-color: $bg-light;
   color: #2d3436;
   font-family: 'Barlow', sans-serif;
@@ -372,6 +366,13 @@ nav {
   }
 }
 
+#rating-area-title {
+  position: relative;
+  margin: 20px;
+  font-size: 25px;
+  font-weight: 600;
+}
+
 
 #review-add-form {
   height: 0;
@@ -390,6 +391,7 @@ nav {
 
   &.enabled {
     height: 500px;
+
     .blur {
       height: 500px;
     }
