@@ -900,12 +900,20 @@ $(function () {
         // manage review button and area
         $('#review-button').on('click', function () {
             if (!_account)
-                popup({
+                return popup({
                     title: 'Account required',
                     message: 'You need to be logged in to your flowshare account to post a comment',
                 });
-            else
-                $('#review-add-form, #review-button').addClass('enabled');
+
+            $('#review-add-form, #review-button').addClass('enabled');
+
+            const flowDataDiv = $('#flow-data');
+
+            // Scroll to the textarea
+            flowDataDiv.animate({
+                scrollTop: $('#rating-add-title').position().top + flowDataDiv.get(0).scrollTop - 10,
+            }, 300);
+
         });
 
         $('#review-add-cancel').on('click', function () {
@@ -957,7 +965,7 @@ $(function () {
                 else
                     popup({
                         title: 'Response',
-                        message: requestData.response
+                        message: requestData.response,
                     });
 
                 //TODO: update comments on positive response
