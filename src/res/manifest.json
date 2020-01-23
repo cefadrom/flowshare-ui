@@ -1,5 +1,9 @@
 {
-  "name": "App",
+  "manifest_version": 2,
+  "name": "Flowshare UI",
+  "version": "1.0.0",
+  "default_locale": "en",
+  "description": "The web interface of the flowshare project",
   "icons": [
     {
       "src": "\/android-icon-36x36.png",
@@ -37,5 +41,10 @@
       "type": "image\/png",
       "density": "4.0"
     }
+  ],
+  "author": "cefadrom <cefadrom1@gmail.com>",
+  "homepage_url": "https://rasphost.com/flowshare/web/",
+  "permissions": [
+    "https://rasphost.com/"
   ]
 }
