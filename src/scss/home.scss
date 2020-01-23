@@ -199,11 +199,11 @@ nav {
 
 #flow-data {
   position: fixed;
-  top: calc(50% + 45px);
+  top: calc(50% + 60px);
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, calc(-50% - 30px));  // Center 30px under the middle
   width: 90vw;
-  max-height: calc(100vh - 85px);
+  max-height: calc(100% - 60px);
   overflow: hidden auto;
   background-color: $bg-dark;
   box-shadow: 0 0 1px 1px #97a3a5;

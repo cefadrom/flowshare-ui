@@ -5,7 +5,7 @@
       <paths name="Flowshare web">
         <serverdata>
           <mappings>
-            <mapping deploy="/tests" local="$PROJECT_DIR$/dist" web="/" />
+            <mapping deploy="/tests" local="$PROJECT_DIR$/dist" web="/tests" />
           </mappings>
         </serverdata>
       </paths>
