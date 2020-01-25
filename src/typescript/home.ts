@@ -78,6 +78,8 @@ $(function () {
 
     });
 
+    // ---------- POPUP MANAGEMENT ----------
+
     interface popupParams {
         message: string;
         timeout?: number;
@@ -130,6 +132,18 @@ $(function () {
             message: error,
             timeout: 15000,
         });
+    }
+
+
+    /**
+     * A function to escape a string to avoid code injection
+     * @param text The text do escape
+     * @return string The escaped text
+     */
+    function escapeHTML(text: string) {
+        return $('<span></span>')
+            .text(text)
+            .html();
     }
 
     // --------------------------------------------------------------------------------------------------
@@ -720,30 +734,25 @@ $(function () {
         $.each(data, function (index, value: any) {
 
             _flowContainerList.append(
-                $('<div class="flow-container"></div>').attr({
-                    'data-flow-id': value['id'],
-                    'data-flow-index': index,
-                }).append(
-                    $('<div class="top-bar"></div>').append(
-                        $('<div class="flow-title"></div>').text(value['title']),
-                        $('<div class="flow-author"></div>').text(value['user']),
-                    ),
-                    $('<div class="card-body"></div>').append(
-                        $('<div class="flow-description"></div>').text(value['description']),
-                        $('<div class="flow-stats"></div>').append(
-                            $('<div></div>')
-                                .append(
-                                    '<i class="fas fa-download"></i>',
-                                    $('<span class="number-container"></span>').text(value['downloads']),
-                                ),
-                            $('<div></div>')
-                                .append(
-                                    '<i class="far fa-star"></i>',
-                                    $('<span class="number-container"></span>').text(value['ratings']),
-                                ),
-                        ),
-                    ),
-                ),
+                `<div class="flow-container" data-flow-id="${value['id']}" data-flow-index="${index}">
+                    <div class="top-bar">
+                        <div class="flow-title">${escapeHTML(value['title'])}</div>
+                        <div class="flow-author">${escapeHTML(value['user'])}</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="flow-description">${escapeHTML(value['description'])}</div>
+                        <div class="flow-stats">
+                            <div>
+                                <i class="fas fa-download"></i>
+                                <span class="number-container">${value['downloads']}</span>
+                            </div>
+                            <div>
+                                <i class="far fa-star"></i>
+                                <span class="number-container">${value['ratings']}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>`,
             );
 
             $('.flow-container:odd').css('backgroundColor', '#E5E5E5');
@@ -811,35 +820,34 @@ $(function () {
     function displayFullFlowData(flowData: Flow, flowID: string) {
 
         $('#flow-data')
-            .html('')
-            .append(
-                '<i class="fas fa-chevron-circle-left back-arrow" id="full-flow-data-back-arrow"></i>',
-                $('<div class="flow-title"></div>').text(flowData['title']),
-                $('<div class="flow-author"></div>').text(flowData['user']),
-                $('<div id="flow-stats-bar"></div>').append(
-                    $('<div></div>').append(
-                        $('<i class="fas fa-download"></i>').append(
-                            $('<span class="number-container"></span>').text(flowData['downloads']),
-                        ),
-                    ),
-                    $('<div></div>').append(
-                        $('<i class="far fa-star"></i>').append(
-                            $('<span class="number-container"></span>').text(flowData['ratings']),
-                        ),
-                    ),
-                ),
-                $('<div class="flow-description"></div>').text(flowData['description']),
-                $('<div id="flow-buttons-bar"></div>').append(
-                    '<div id="download-button"><i class="fas fa-file-download" style="margin-right: 5px"></i>Download</div>',
-                    '<div id="review-button" style="float: none"><i class="fas fa-user-plus" style="margin-right: 5px"></i>Add review</div>',
-                ),
-                $('<form id="review-add-form" onsubmit="return false"></form>').append(
-                    '<div class="blur"></div>',
-                    '<div id="rating-add-title">Add a review</div>',
-                    '<textarea></textarea>',
-                    '<input id="review-add-submit" type="button" value="Post comment">',
-                    '<input id="review-add-cancel" type="reset" value="Cancel">',
-                ),
+            .html(
+                `
+                <i class="fas fa-chevron-circle-left back-arrow" id="full-flow-data-back-arrow"></i>
+                <div class="flow-title">${escapeHTML(flowData['title'])}</div>
+                <div class="flow-author">${escapeHTML(flowData['user'])}</div>
+                <div id="flow-stats-bar">
+                    <div>
+                        <i class="fas fa-download"></i>
+                        <span class="number-container">${flowData['downloads']}</span>
+                    </div>
+                    <div>
+                        <i class="far fa-star"></i>
+                        <span class="number-container">${flowData['ratings']}</span>
+                    </div>
+                </div>
+                <div class="flow-description">${escapeHTML(flowData['description'])}</div>
+                <div id="flow-buttons-bar">
+                    <div id="download-button"><i class="fas fa-file-download" style="margin-right: 5px"></i>Download</div>
+                    <div id="review-button" style="float: none"><i class="fas fa-user-plus" style="margin-right: 5px"></i>Add review</div>
+                </div>
+                <form id="review-add-form" onsubmit="return false">
+                    <div class="blur"></div>
+                    <div id="rating-add-title">Add a review</div>
+                    <textarea></textarea>
+                    <input id="review-add-submit" type="button" value="Post comment">
+                    <input id="review-add-cancel" type="reset" value="Cancel">
+                </form>
+                `
             )
             .css('opacity', 1)
             .css('pointerEvents', 'all');
