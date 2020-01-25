@@ -10,6 +10,8 @@ html, body {
 // ---------- FILTERS ----------
 
 nav {
+  user-select: none;
+
   .sub-title {
     position: relative;
     width: 100%;
@@ -77,6 +79,8 @@ nav {
   background-color: $bg-dark;
   box-shadow: 0 0 1px 1px #97a3a5;
   transition: .4s;
+  user-select: none;
+  cursor: pointer;
 
   @media all and (max-width: 1000px) {
     left: 5%;
@@ -201,7 +205,7 @@ nav {
   position: fixed;
   top: calc(50% + 60px);
   left: 50%;
-  transform: translate(-50%, calc(-50% - 30px));  // Center 30px under the middle
+  transform: translate(-50%, calc(-50% - 30px)); // Center 30px under the middle
   width: 90vw;
   max-height: calc(100% - 60px);
   overflow: hidden auto;
@@ -302,6 +306,7 @@ nav {
   align-items: center;
   justify-content: space-evenly;
   width: 100%;
+  user-select: none;
 
   div {
     min-width: 100px;
@@ -320,6 +325,7 @@ nav {
   justify-content: space-evenly;
   margin-top: 10px;
   width: 100%;
+  user-select: none;
 
   div {
     border: 1px solid $theme-color;
@@ -456,12 +462,14 @@ footer {
   height: $footerHeight;
   background-color: $theme-color;
 
-  div {
+  div, a, a:link, a:visited {
     display: inline-block;
     width: calc(50% - 2px);
     text-align: center;
     font-size: $footerHeight / 3;
     line-height: $footerHeight;
+    text-decoration: none;
+    color: inherit;
   }
 
   @media all and (max-width: 500px) {
