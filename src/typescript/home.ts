@@ -724,19 +724,25 @@ $(function () {
                     'data-flow-id': value['id'],
                     'data-flow-index': index,
                 }).append(
-                    $('<div class="flow-title"></div>').text(value['title']),
-                    $('<div class="flow-author"></div>').text(value['user']),
-                    $('<div class="flow-description"></div>').text(value['description']),
-                    $('<div class="flow-downloads"></div>')
-                        .append($('<i class="fas fa-download"></i>')
-                            .append($('<span class="number-container"></span>').text(value['downloads']),
-                            ),
+                    $('<div class="top-bar"></div>').append(
+                        $('<div class="flow-title"></div>').text(value['title']),
+                        $('<div class="flow-author"></div>').text(value['user']),
+                    ),
+                    $('<div class="card-body"></div>').append(
+                        $('<div class="flow-description"></div>').text(value['description']),
+                        $('<div class="flow-stats"></div>').append(
+                            $('<div></div>')
+                                .append(
+                                    '<i class="fas fa-download"></i>',
+                                    $('<span class="number-container"></span>').text(value['downloads']),
+                                ),
+                            $('<div></div>')
+                                .append(
+                                    '<i class="far fa-star"></i>',
+                                    $('<span class="number-container"></span>').text(value['ratings']),
+                                ),
                         ),
-                    $('<div class="flow-rating"></div>')
-                        .append($('<i class="far fa-star"></i>')
-                            .append($('<span class="number-container"></span>').text(value['ratings']),
-                            ),
-                        ),
+                    ),
                 ),
             );
 
