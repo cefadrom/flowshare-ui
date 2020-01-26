@@ -103,21 +103,22 @@ $(function () {
 
     const _contentDiv = $('#content');
     const _categoryDiv = $('.category');
+    const _navDiv = $('nav');
 
-    $('.category:first').css('backgroundColor', '#fdcb6e');
+    $('.category:first').addClass('selected');
 
     _categoryDiv.on('click.flowshare', function () {
 
         if (_allowChoseCategory) {
 
-            $('.category').css('backgroundColor', 'transparent');
-            $(this).css('backgroundColor', '#fdcb6e');
+            $('.category').removeClass('selected');
+            $(this).addClass('selected');
 
             let category = $(this).attr('data-nav-value');
             if (category === 'account' || category === 'upload' || category === 'daily')
                 setCategory(category);
             else
-                console.error('Category is undefined');
+                console.error(`Category "${category}" is undefined`);
 
         }
 
@@ -149,7 +150,7 @@ $(function () {
     }
 
     setTimeout(() => {
-        _categoryDiv.css('transition', '.4s');
+        _categoryDiv.addClass('transition');
     }, 400);
 
 
@@ -175,16 +176,16 @@ $(function () {
             _allowNavExtend = false;
             $('#nav-arrow').hide();
         }
-        _isNavExtended = <number>$('nav').height() < 100;
+        _isNavExtended = <number>_navDiv.height() < 100;
     }
 
     function extentNav(extend?: boolean) {
         if (!_allowNavExtend) return;
         if (extend) {
-            $('nav').css('height', '60px');
+            _navDiv.removeClass('expanded');
             $('#nav-arrow').removeClass('active');
         } else {
-            $('nav').css('height', '310px');
+            _navDiv.addClass('expanded');
             $('#nav-arrow').addClass('active');
         }
     }
@@ -213,10 +214,7 @@ $(function () {
 
         _contentDiv.html('<div id="loading-message">Loading data...</div>');
 
-        _categoryDiv.css({
-            cursor: 'pointer',
-            opacity: '1',
-        });
+        _navDiv.removeClass('unavailable');
         _allowChoseCategory = true;
 
         if (data) return displayContent(data);
@@ -279,10 +277,7 @@ $(function () {
 
         _contentDiv.html('');
 
-        _categoryDiv.css({
-            cursor: 'not-allowed',
-            opacity: '.6',
-        });
+        _navDiv.addClass('unavailable');
 
         _allowChoseCategory = false;
         const newElement = setTemplate('login', _contentDiv);
@@ -382,10 +377,7 @@ $(function () {
 
         _contentDiv.html('');
 
-        _categoryDiv.css({
-            cursor: 'not-allowed',
-            opacity: '.6',
-        });
+        _navDiv.addClass('unavailable');
 
         _allowChoseCategory = false;
 
@@ -468,10 +460,7 @@ $(function () {
 
         _contentDiv.html('');
 
-        _categoryDiv.css({
-            cursor: 'not-allowed',
-            opacity: '.6',
-        });
+        _navDiv.addClass('unavailable');
 
         _allowChoseCategory = false;
         const contentRegister = setTemplate('register', _contentDiv);
