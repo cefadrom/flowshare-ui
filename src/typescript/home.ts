@@ -222,6 +222,7 @@ $(function () {
     const _resultContainer = $('#search-results');
     const _searchTxtElement = $('#search-txt');
     const _searchTxtInput = <HTMLInputElement>_searchTxtElement.get(0);
+    const _headerDiv = $('header');
 
 
     /**
@@ -253,13 +254,7 @@ $(function () {
 
         if (showFull) { // full search bar
 
-            $('#logo-big, #header-account').fadeOut(200);   // makes logo and account disappear
-            _searchBoxDiv.css({  // expand global div
-                width: '280px',
-                right: 'calc((100% - 280px) / 2)',
-            });
-            _searchTxtElement.css('width', '230px'); // expand search field
-            _resultContainer.show(); // shows results
+            _headerDiv.addClass('search-expand');   // Set the expansion style to the nav-bar
 
             setTimeout(() => {
                 _isSearchBarExtended = true;
@@ -269,14 +264,8 @@ $(function () {
 
         } else {    // close search bar
 
-            $('#logo-big, #header-account').fadeIn(200);    // makes logo and account appear
-            _searchBoxDiv
-                .css({  // collapse global div
-                    width: 'auto',
-                    right: '120px',
-                })
-                .trigger('blur');    // remove the focus
-            _searchTxtElement.css('width', '0');     // collapse search field
+            _headerDiv.removeClass('search-expand');    // Reset the default style to the bar
+            _searchBoxDiv.trigger('blur');    // remove the focus
             _resultContainer.hide(); // hide results
             _isSearchBarExtended = false;
 
@@ -847,7 +836,7 @@ $(function () {
                     <input id="review-add-submit" type="button" value="Post comment">
                     <input id="review-add-cancel" type="reset" value="Cancel">
                 </form>
-                `
+                `,
             )
             .css('opacity', 1)
             .css('pointerEvents', 'all');
@@ -866,7 +855,7 @@ $(function () {
         _flowContainerList.css('opacity', 0);
         $('nav').css('opacity', 0);
         _body.css('pointerEvents', 'none');
-        $('header').css('pointerEvents', 'all');
+        _headerDiv.css('pointerEvents', 'all');
 
         flowBackArrowClick();
 
