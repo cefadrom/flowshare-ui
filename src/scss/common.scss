@@ -83,15 +83,12 @@ header {
     height: auto;
     padding: 0;
 
-    &.search-padding {
+    &.show-results {
+      display: block;
       padding: 8px;
     }
-  }
 
-  &.search-expand {
-    #search-results {
-      display: block;
-    }
+    //TODO : bug fix on mobile
   }
 }
 

@@ -283,7 +283,7 @@ $(function () {
             () => {
                 searchBarResize(false);
                 _resultContainer
-                    .removeClass('search-padding')
+                    .removeClass('show-results')
                     .html('');
             },
             100,
@@ -300,7 +300,7 @@ $(function () {
 
         if (searchStr.match(/^ *$/))  // if field is blank
             return _resultContainer
-                .removeClass('search-padding')
+                .removeClass('show-results')
                 .html('');
 
         instantSearch(searchStr);
@@ -346,7 +346,7 @@ $(function () {
             if (_searchTxtElement.val() !== str) return;
 
             _resultContainer
-                .addClass('search-padding')
+                .addClass('show-results')
                 .html('');
 
             if (error) return _resultContainer.append(
