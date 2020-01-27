@@ -472,14 +472,15 @@ footer {
     line-height: $footerHeight;
     text-decoration: none;
     color: inherit;
+    white-space: nowrap;
+
+    @media all and (max-width: $bp-footer-small) {
+      width: 100vw;
+    }
   }
 
   @media all and (max-width: $bp-footer-small) {
     height: $footerHeight * 2;
     margin-bottom: -$footerHeight * 2;
-
-    div {
-      width: 100vw;
-    }
   }
 }
