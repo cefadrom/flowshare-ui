@@ -266,7 +266,6 @@ $(function () {
 
             _headerDiv.removeClass('search-expand');    // Reset the default style to the bar
             _searchBoxDiv.trigger('blur');    // remove the focus
-            _resultContainer.hide(); // hide results
             _isSearchBarExtended = false;
 
         }
@@ -284,7 +283,7 @@ $(function () {
             () => {
                 searchBarResize(false);
                 _resultContainer
-                    .css('padding', '0')
+                    .removeClass('search-padding')
                     .html('');
             },
             100,
@@ -301,7 +300,7 @@ $(function () {
 
         if (searchStr.match(/^ *$/))  // if field is blank
             return _resultContainer
-                .css('padding', '0')
+                .removeClass('search-padding')
                 .html('');
 
         instantSearch(searchStr);
@@ -347,7 +346,7 @@ $(function () {
             if (_searchTxtElement.val() !== str) return;
 
             _resultContainer
-                .css('padding', '8px')
+                .addClass('search-padding')
                 .html('');
 
             if (error) return _resultContainer.append(

@@ -77,10 +77,21 @@ header {
   }
 
   #search-results {
+    display: none;
     position: relative;
     width: calc(100% - 16px);
     height: auto;
     padding: 0;
+
+    &.search-padding {
+      padding: 8px;
+    }
+  }
+
+  &.search-expand {
+    #search-results {
+      display: block;
+    }
   }
 }
 
