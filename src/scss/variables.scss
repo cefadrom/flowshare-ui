@@ -1,4 +1,22 @@
+// ---------- Colors ----------
 $theme-color: #fdcb6e;
 $bg-light: #DDD;
 $bg-dark: #EEE;
+
+// ---------- Misc ----------
 $footerHeight: 60px;
+
+// ---------- Breakpoints ----------
+// Nav bar
+$bp-nav-big: 900px;
+$bp-nav-medium: 750px;
+$bp-nav-small: 520px;
+// Filters
+$bp-filters-big: 1000px;
+$bp-filters-small: 354px;
+// Flow browser
+$bp-fb-medium: 404px;
+// Single flow details
+$bp-details-small: 500px;
+// Footer
+$bp-footer-small: 500px;

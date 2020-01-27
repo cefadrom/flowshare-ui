@@ -92,7 +92,7 @@ header {
 
 // collapse search result when search bar is not expanded on mobile
 
-@media all and (max-width: 750px) {
+@media all and (max-width: $bp-nav-medium) {
   header:not(.search-expand) #search-results.show-results {
     display: none;
     padding: 0;
@@ -169,7 +169,7 @@ header {
 
 // ----- MOBILE RESPONSIBILITY -----
 
-@media all and (max-width: 900px) {
+@media all and (max-width: $bp-nav-big) {
 
   header {
 
@@ -193,7 +193,7 @@ header {
 
 }
 
-@media all and (max-width: 750px) {
+@media all and (max-width: $bp-nav-medium) {
 
   header {
 
@@ -219,7 +219,7 @@ header {
   }
 }
 
-@media all and (max-width: 520px) {
+@media all and (max-width: $bp-nav-small) {
 
   header {
     height: 60px;

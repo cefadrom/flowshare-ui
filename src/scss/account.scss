@@ -40,12 +40,12 @@ nav {
     opacity: .6;
   }
 
-  @media all and (max-height: 450px) and (min-width: 1000px) {
+  @media all and (max-height: 450px) and (min-width: $bp-filters-big) {
     overflow: hidden auto;
     height: calc(100% - 140px);
   }
 
-  @media all and (max-width: 1000px) {
+  @media all and (max-width: $bp-filters-big) {
     position: relative;
     left: calc(50% - 175px);
     top: 110px;
@@ -55,11 +55,11 @@ nav {
     }
   }
 
-  @media all and (max-width: 520px) {
+  @media all and (max-width: $bp-nav-small) {
     top: 90px;
   }
 
-  @media all and (max-width: 354px) {
+  @media all and (max-width: $bp-filters-small) {
     width: 100%;
     left: 0;
   }
@@ -84,17 +84,17 @@ nav {
     user-select: unset;
   }
 
-  @media all and (max-width: 1000px) {
+  @media all and (max-width: $bp-filters-small) {
     top: 144px;
     left: 5%;
     width: 90%;
   }
 
-  @media all and (max-width: 520px) {
+  @media all and (max-width: $bp-nav-small) {
     top: 114px;
   }
 
-  @media all and (max-width: 404px) {
+  @media all and (max-width: $bp-fb-medium) {
     width: 100%;
     left: 0;
   }
