@@ -2,7 +2,7 @@
 @import "variables";
 
 html, body {
-  background-color: $bg-light;
+  background-color: $bg-dark;
   color: #2d3436;
   font-family: 'Barlow', sans-serif;
   overflow: hidden auto;
@@ -75,7 +75,7 @@ nav {
   height: auto;
   min-height: 100px;
   width: calc(84% - 350px);
-  background-color: $bg-dark;
+  background-color: $bg-light;
   box-shadow: 0 0 1px 1px #97a3a5;
   user-select: none;
   transition: .4s;

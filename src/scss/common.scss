@@ -17,7 +17,7 @@ header {
   width: 100%;
   height: $header-height-big;
   top: 0;
-  background: $bg-dark;
+  background: $bg-light;
   position: fixed;
   box-shadow: 0 2px 2px #97a3a5;
   user-select: none;
@@ -146,7 +146,7 @@ header {
     right: 60px;
     padding: 10px 15px;
     font-size: 20px;
-    background-color: $bg-dark;
+    background-color: $bg-light;
     box-shadow: 0 0 2px 2px #b9b9b9;
     border-radius: 10px;
     cursor: pointer;
@@ -266,7 +266,7 @@ nav {
   left: 5%;
   height: 310px;
   width: 350px;
-  background-color: $bg-dark;
+  background-color: $bg-light;
   box-shadow: 0 0 1px 1px #97a3a5;
   transition: .4s;
   overflow: hidden;
@@ -320,7 +320,7 @@ nav {
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 10px 15px;
-  background: $bg-light;
+  background: $bg-dark;
   box-shadow: 0 0 2px 2px #97a3a5;
   border-radius: 5px;
   text-align: center;
