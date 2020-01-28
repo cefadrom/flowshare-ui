@@ -206,11 +206,11 @@ nav {
 
 #flow-data {
   position: fixed;
-  top: calc(50% + 60px);
+  top: calc(50% + #{$header-height-big});
   left: 50%;
-  transform: translate(-50%, calc(-50% - 30px)); // Center 30px under the middle
+  transform: translate(-50%, calc(-50% - (#{$header-height-big} / 2))); // Center 30px under the middle
   width: 90vw;
-  max-height: calc(100% - 60px);
+  max-height: calc(100% - #{$header-height-big});
   overflow: hidden auto;
   background-color: $bg-dark;
   box-shadow: 0 0 1px 1px #97a3a5;
@@ -218,6 +218,12 @@ nav {
   opacity: 0;
   pointer-events: none;
   z-index: 2;
+
+  @media all and (max-width: $bp-nav-small) {
+    transform: translate(-50%, calc(-50% - (#{$header-height-small} / 2)));
+    max-height: calc(100% - #{$header-height-small});
+    top: calc(50% + #{$header-height-small});
+  }
 
   @media all and (max-width: $bp-details-small) {
     width: 100%;
