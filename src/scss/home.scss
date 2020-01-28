@@ -1,7 +1,7 @@
 @import "common";
 
 html, body {
-  background-color: $bg-light;
+  background-color: $bg-dark;
   color: #2d3436;
   font-family: 'Barlow', sans-serif;
   overflow: hidden auto;
@@ -76,7 +76,7 @@ nav {
   left: calc(10% + 350px);
   margin: 144px 0 50px;
   width: calc(84% - 350px);
-  background-color: $bg-dark;
+  background-color: $bg-light;
   box-shadow: 0 0 1px 1px #97a3a5;
   transition: .4s;
   user-select: none;
@@ -132,6 +132,10 @@ nav {
   position: relative;
   width: 100%;
   height: 130px;
+
+  &.bg-accent {
+    background: $bg-light-accent;
+  }
 
   .top-bar {
     display: flex;
@@ -212,7 +216,7 @@ nav {
   width: 90vw;
   max-height: calc(100% - #{$header-height-big});
   overflow: hidden auto;
-  background-color: $bg-dark;
+  background-color: $bg-light;
   box-shadow: 0 0 1px 1px #97a3a5;
   transition: .4s;
   opacity: 0;
@@ -367,6 +371,10 @@ nav {
 .rating-container {
   position: relative;
   padding: 15px;
+
+  &.bg-accent {
+    background: $bg-light-accent;
+  }
 
   .rating-title {
     position: relative;

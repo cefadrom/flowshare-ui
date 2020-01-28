@@ -743,7 +743,7 @@ $(function () {
                 </div>`,
             );
 
-            $('.flow-container:odd').css('backgroundColor', '#E5E5E5');
+            $('.flow-container:odd').addClass('bg-accent');
 
         });
 
@@ -1105,7 +1105,7 @@ $(function () {
 
             });
 
-            $('.rating-container:even').css('backgroundColor', '#E5E5E5');
+            $('.rating-container:even').addClass('bg-accent');
 
         }
 
