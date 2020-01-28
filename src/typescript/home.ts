@@ -838,8 +838,7 @@ $(function () {
                 </form>
                 `,
             )
-            .css('opacity', 1)
-            .css('pointerEvents', 'all');
+            .addClass('visible');
 
 
         // manage download button
@@ -852,10 +851,10 @@ $(function () {
 
         // manage flow list
 
-        _flowContainerList.css('opacity', 0);
-        $('nav').css('opacity', 0);
-        _body.css('pointerEvents', 'none');
-        _headerDiv.css('pointerEvents', 'all');
+        _flowContainerList.addClass('hidden');
+        $('nav').addClass('hidden');
+        _body.addClass('no-interaction');
+        _headerDiv.removeClass('no-interaction');
 
         flowBackArrowClick();
 
@@ -1049,14 +1048,10 @@ $(function () {
             .off('click.flowshare')
             .on('click.flowshare', () => {
                 triggerFlowContainerClick();
-                $('#flow-list-container, nav')
-                    .css('opacity', 1);
-                _body
-                    .css('pointerEvents', 'all');
-                $('#flow-data')
-                    .css('opacity', 0)
-                    .css('pointerEvents', 'none')
-                    .html('');
+                $('nav').removeClass('hidden');
+                $('#flow-data').removeClass('visible');
+                $('#flow-list-container').removeClass('hidden');
+                _body.removeClass('no-interaction');
                 delete _searchFilters.id;
                 applyFilters(false);
             });

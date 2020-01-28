@@ -7,6 +7,10 @@ html, body {
   overflow: hidden auto;
 }
 
+body.no-interaction {
+  pointer-events: none;
+}
+
 // ---------- FILTERS ----------
 
 nav {
@@ -15,6 +19,10 @@ nav {
 
   &.expanded {
     height: 310px;
+  }
+
+  &.hidden {
+    opacity: 0;
   }
 
   .sub-title {
@@ -87,9 +95,13 @@ nav {
   width: calc(84% - 350px);
   background-color: $bg-light;
   box-shadow: 0 0 1px 1px #97a3a5;
-  transition: .4s;
   user-select: none;
   cursor: pointer;
+  transition: .4s;
+
+  &.hidden {
+    opacity: 0;
+  }
 
   @media all and (max-width: $bp-filters-big) {
     left: 5%;
@@ -231,6 +243,11 @@ nav {
   opacity: 0;
   pointer-events: none;
   z-index: 2;
+
+  &.visible {
+    opacity: 1;
+    pointer-events: all;
+  }
 
   @media all and (max-width: $bp-nav-small) {
     transform: translate(-50%, calc(-50% - (#{$header-height-small} / 2)));

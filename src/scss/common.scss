@@ -113,6 +113,10 @@ header {
 
 header {
 
+  &.no-interaction {
+    pointer-events: none;
+  }
+
   #header-account, #header-home {
     position: relative;
     right: 50px;
