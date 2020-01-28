@@ -489,9 +489,10 @@ $(function () {
         if (displayType === 'filter') {
 
             _responseDiv.each(function () {
-                if ($(this).attr('data-filter-value') !== value) return;  // if wrong div
-                $(this).parent().children('.response').css('backgroundColor', 'transparent');   // removing color of other fibers
-                $(this).css('backgroundColor', '#fdcb6e');  // setting color of selection
+                const e = $(this);
+                if (e.attr('data-filter-value') !== value) return;  // if wrong div
+                $('nav .response').removeClass('selected');   // removing color of other fibers
+                e.addClass('selected');  // setting color of selection
                 result = true;
             });
 
@@ -558,8 +559,8 @@ $(function () {
 
     $('.filter').on('click', '.response', function () {
         let sel = $(this);
-        sel.parent().children('.response').css('backgroundColor', 'transparent');   // removing color of other fibers
-        sel.css('backgroundColor', '#fdcb6e');  // setting color of selection
+        $('nav .response').removeClass('selected');   // removing color of other fibers
+        sel.addClass('selected');  // setting color of selection
 
         // ----- MANAGE FILTERS -----
 
