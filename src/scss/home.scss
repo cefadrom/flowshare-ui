@@ -239,14 +239,13 @@ nav {
   overflow: hidden auto;
   background-color: $bg-light;
   box-shadow: 0 0 1px 1px #97a3a5;
+  pointer-events: all;
   transition: .4s;
-  opacity: 0;
-  pointer-events: none;
   z-index: 2;
 
-  &.visible {
-    opacity: 1;
-    pointer-events: all;
+  &.hidden {
+    opacity: 0;
+    pointer-events: none;
   }
 
   @media all and (max-width: $bp-nav-small) {

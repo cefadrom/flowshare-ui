@@ -515,6 +515,7 @@ $(function () {
 
     let _isFilterExtended = true;
     let _allowFilterExtend = _windowWidth < 1000;
+    const _navDiv = $('nav');
 
     if (_windowWidth < 1000) $('#nav-arrow').show();
 
@@ -537,7 +538,7 @@ $(function () {
             _allowFilterExtend = false;
             $('#nav-arrow').hide();
         }
-        _isFilterExtended = <number>$('nav').width() < 100;
+        _isFilterExtended = <number>_navDiv.width() < 100;
     }
 
 
@@ -548,10 +549,10 @@ $(function () {
     function extentFilter(extend: boolean): void {
         if (!_allowFilterExtend) return;
         if (extend) {
-            $('nav').removeClass('expanded');
+            _navDiv.removeClass('expanded');
             $('#nav-arrow').removeClass('active');
         } else {
-            $('nav').addClass('expanded');
+            _navDiv.addClass('expanded');
             $('#nav-arrow').addClass('active');
         }
         setTimeout(footerWindowResize, 400);  // manage the footer position
@@ -838,7 +839,7 @@ $(function () {
                 </form>
                 `,
             )
-            .addClass('visible');
+            .removeClass('hidden');
 
 
         // manage download button
@@ -852,18 +853,16 @@ $(function () {
         // manage flow list
 
         _flowContainerList.addClass('hidden');
-        $('nav').addClass('hidden');
+        _navDiv.addClass('hidden');
         _body.addClass('no-interaction');
         _headerDiv.removeClass('no-interaction');
 
         flowBackArrowClick();
 
         // query flow ratings
-
         getFlowReviews(flowID);
 
         // update url
-
         _searchFilters['id'] = <string>flowID;
         applyFilters(false);
 
@@ -1048,14 +1047,12 @@ $(function () {
             .off('click.flowshare')
             .on('click.flowshare', () => {
                 triggerFlowContainerClick();
-                $('nav').removeClass('hidden');
-                $('#flow-data').removeClass('visible');
-                $('#flow-list-container').removeClass('hidden');
+                $('nav, #flow-data, #flow-list-container').addClass('hidden');
+                $('nav, #flow-list-container').removeClass('hidden');
                 _body.removeClass('no-interaction');
                 delete _searchFilters.id;
                 applyFilters(false);
             });
-
     }
 
 
@@ -1152,9 +1149,9 @@ $(function () {
      */
     function footerWindowResize() {
 
-        const footerDiv = $('footer'), filterDiv = $('nav');
+        const footerDiv = $('footer');
         // determine the lowest container
-        const filterBottom: number = filterDiv.position().top + (filterDiv.height() || 200) + 100;
+        const filterBottom: number = _navDiv.position().top + (_navDiv.height() || 200) + 100;
         const flowContainerBottom: number = _flowContainerList.position().top + (_flowContainerList.height() || 0) + 100;
         const bottomContainer: number = Math.max(filterBottom, flowContainerBottom);
 
