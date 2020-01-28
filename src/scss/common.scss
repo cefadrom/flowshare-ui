@@ -15,7 +15,7 @@ $bar-fadeout-dur: .2s;
 
 header {
   width: 100%;
-  height: 80px;
+  height: $header-height-big;
   top: 0;
   background: $bg-dark;
   position: fixed;
@@ -222,7 +222,7 @@ header {
 @media all and (max-width: $bp-nav-small) {
 
   header {
-    height: 60px;
+    height: $header-height-small;
 
     #logo-big {
       background-image: url('../img/flowshare-square.png');
