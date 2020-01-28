@@ -504,6 +504,10 @@ footer {
   height: $footerHeight;
   background-color: $theme-color;
 
+  &.relative {
+    position: relative;
+  }
+
   div, a, a:link, a:visited {
     display: inline-block;
     width: calc(50% - 2px);

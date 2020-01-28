@@ -1149,21 +1149,19 @@ $(function () {
      */
     function footerWindowResize() {
 
-        const footerDiv = $('footer');
+        const footerDiv = $('footer');  // TODO: fix a bug on mobile when the screen height = 600px
         // determine the lowest container
-        const filterBottom: number = _navDiv.position().top + (_navDiv.height() || 200) + 100;
-        const flowContainerBottom: number = _flowContainerList.position().top + (_flowContainerList.height() || 0) + 100;
+        const filtersOffset = _navDiv.offset() || { top: 0 };
+        const filterBottom: number = filtersOffset.top + (_navDiv.height() || 200) + 100;
+        const flowContainerListOffset = _flowContainerList.offset() || { top: 0 };
+        const flowContainerBottom: number = flowContainerListOffset.top + ($('body').scrollTop() || 0) + (_flowContainerList.height() || 0) + 100;
         const bottomContainer: number = Math.max(filterBottom, flowContainerBottom);
-
+        console.log(filterBottom, flowContainerBottom, _windowHeight, _windowHeight - 105);
         // set the footer position
-        if (bottomContainer < _windowHeight - 85)
-            footerDiv.css({
-                position: 'absolute',
-            });
+        if (bottomContainer < _windowHeight + (footerDiv.height() || 60) - 5)
+            footerDiv.removeClass('relative');
         else
-            footerDiv.css({
-                position: 'relative',
-            });
+            footerDiv.addClass('relative');
 
     }
 
