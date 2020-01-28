@@ -84,7 +84,7 @@ nav {
     user-select: unset;
   }
 
-  @media all and (max-width: $bp-filters-small) {
+  @media all and (max-width: $bp-filters-big) {
     top: 144px;
     left: 5%;
     width: 90%;
@@ -94,7 +94,7 @@ nav {
     top: 114px;
   }
 
-  @media all and (max-width: $bp-fb-medium) {
+  @media all and (max-width: $bp-content-medium) {
     width: 100%;
     left: 0;
   }
