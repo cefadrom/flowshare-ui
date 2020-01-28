@@ -167,13 +167,14 @@ nav {
     padding: 0 15px;
 
     .flow-description {
+      $line-height: 28px;
       position: relative;
       flex-grow: 1;
-      height: 100%;
+      height: $line-height * 3;
       font-size: 18px;
       overflow: hidden;
       white-space: pre-wrap;
-      line-height: 28px;
+      line-height: $line-height;
     }
 
     .flow-stats {
