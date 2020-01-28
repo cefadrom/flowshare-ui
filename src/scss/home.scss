@@ -11,6 +11,11 @@ html, body {
 
 nav {
   user-select: none;
+  height: 60px;
+
+  &.expanded {
+    height: 310px;
+  }
 
   .sub-title {
     position: relative;

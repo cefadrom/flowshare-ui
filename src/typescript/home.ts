@@ -548,10 +548,10 @@ $(function () {
     function extentFilter(extend: boolean): void {
         if (!_allowFilterExtend) return;
         if (extend) {
-            $('nav').css('height', '60px');
+            $('nav').removeClass('expanded');
             $('#nav-arrow').removeClass('active');
         } else {
-            $('nav').css('height', '310px');
+            $('nav').addClass('expanded');
             $('#nav-arrow').addClass('active');
         }
         setTimeout(footerWindowResize, 400);  // manage the footer position
