@@ -307,7 +307,6 @@ nav {
 }
 
 // Manages the bar which contains the stats
-
 #flow-stats-bar {
   display: flex;
   flex-direction: row;
@@ -326,6 +325,7 @@ nav {
   }
 }
 
+// Manage the bar which contains the download and the review button
 #flow-buttons-bar {
   display: flex;
   flex-direction: row;
@@ -337,14 +337,14 @@ nav {
   user-select: none;
 
   div {
+    width: 140px;
+    margin: 0 10px 10px;
+    padding: 15px 20px;
     border: 1px solid $theme-color;
     border-radius: 22px;
-    cursor: pointer;
     font-size: 20px;
-    padding: 15px 20px;
-    width: 140px;
     text-align: center;
-    margin-bottom: 10px;
+    cursor: pointer;
     transition: .4s;
 
     &:hover {
