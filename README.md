@@ -1,5 +1,7 @@
 # FLOWSHARE UI
 
-The web user interface of the [flowshare project](https://rpi.rasphost.com/)
+The web user interface of the flowshare project
 
-### Beta version online : [flowshare ui](https://rasphost.com/flowshare/web/tests)
+### Important note : the project is *dead*, the site or the API may not be available anymore
+
+Version online : [flowshare ui](https://rasphost.com/flowshare/web)
